@@ -1,0 +1,17 @@
+#version 430 core
+
+in vec4  mvf_vertex;      // LibSL takes care of vertex attributes 'mvf_*' (normal,color0,texcoord0,etc.)
+in float a_h;
+in float a_grad_h_z;
+
+out float v_h;
+out float v_grad_h_z;
+
+uniform mat4    u_matrix;
+
+void main()
+{
+  v_h         = a_h;
+  v_grad_h_z  = a_grad_h_z;
+  gl_Position = u_matrix * mvf_vertex;
+}

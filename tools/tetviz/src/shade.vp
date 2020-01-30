@@ -1,0 +1,43 @@
+
+uniform mat4    u_matrix;
+uniform mat4    u_model;
+
+attribute float a_h; 
+attribute float a_grad_h_z;
+attribute float a_widding;
+
+varying float   v_h;
+varying float v_grad_h_z;
+
+varying float   v_z;
+
+varying vec3    v_pos;
+varying float   v_widding;
+
+uniform float   u_ClipY;
+uniform int     u_ClipDir;
+uniform int     u_Deform;
+
+void main()
+{
+  v_h = a_h;
+  v_grad_h_z = a_grad_h_z;
+  v_z = gl_Vertex.z;
+
+  v_widding = a_widding;
+
+  vec4 pos;
+  if (u_Deform == 1) {
+    pos = vec4(gl_Vertex.xy,v_h,1.0);
+  } else {
+    pos = vec4(gl_Vertex.xyz,1.0);
+  }
+
+  v_pos = (u_model * pos).xyz;
+  gl_Position = u_matrix * pos;
+  if (a_widding == 0) {
+    gl_ClipDistance[0] = 1.0;
+  } else {
+    gl_ClipDistance[0] = u_ClipDir * (-pos.y + u_ClipY);
+  }
+}
