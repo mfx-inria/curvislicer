@@ -1,3 +1,4 @@
 [submodule "LibSL-small"]
 	path = LibSL-small
 	url = https://github.com/JuDePom/LibSL-small.git
+	branch = CurviSlice
