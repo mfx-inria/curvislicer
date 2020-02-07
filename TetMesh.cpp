@@ -23,8 +23,7 @@ using namespace LibSL::CppHelpers;
 #include <set>
 #include <queue>
 
-#include "gurobi_c++.h"
-
+#include "Model.h"
 
 
 TetMesh::TetMesh()
@@ -357,46 +356,43 @@ double LUPDeterminant(double **A, int *P, int N) {
 }
 
 M3x3 TetMesh::getGradientMatrix(uint t) {
-  M3x3 m(0.);
+    M3x3 m(0.);
 
-  v3f A = vertexAt(tetrahedronAt(t)[0]);
-  v3f B = vertexAt(tetrahedronAt(t)[1]);
-  v3f C = vertexAt(tetrahedronAt(t)[2]);
-  v3f D = vertexAt(tetrahedronAt(t)[3]);
+    v3f A = vertexAt(tetrahedronAt(t)[0]);
+    v3f B = vertexAt(tetrahedronAt(t)[1]);
+    v3f C = vertexAt(tetrahedronAt(t)[2]);
+    v3f D = vertexAt(tetrahedronAt(t)[3]);
 
-  A -= D;
-  B -= D;
-  C -= D;
+    A -= D;
+    B -= D;
+    C -= D;
 
-  static GRBEnv env = GRBEnv();
-  GRBModel model = GRBModel(env);
-  model.set(GRB_IntParam_OutputFlag, false);
+    AutoPtr<SLRModel<double>> model(new SLRModel<double>());
+    model->printDebug(false);
 
-  GRBVar M[9];
+    SLRVar<double> M[9];
 
-  ForIndex(i, 9) {
-    M[i] = model.addVar(-1000.0f, 1000.0f, m[i], GRB_CONTINUOUS);
-  }
+    ForIndex(i, 9) {
+        M[i] = model->addVar(-1000.0f, 1000.0f, m[i]);
+    }
 
-  model.addConstr(M[0] * A[0] + M[1] * B[0] + M[2] * C[0] == 1.);
-  model.addConstr(M[0] * A[1] + M[1] * B[1] + M[2] * C[1] == 0.);
-  model.addConstr(M[0] * A[2] + M[1] * B[2] + M[2] * C[2] == 0.);
+    model->addConstr(M[0] * A[0] + M[1] * B[0] + M[2] * C[0] == 1.);
+    model->addConstr(M[0] * A[1] + M[1] * B[1] + M[2] * C[1] == 0.);
+    model->addConstr(M[0] * A[2] + M[1] * B[2] + M[2] * C[2] == 0.);
 
-  model.addConstr(M[3] * A[0] + M[4] * B[0] + M[5] * C[0] == 0.);
-  model.addConstr(M[3] * A[1] + M[4] * B[1] + M[5] * C[1] == 1.);
-  model.addConstr(M[3] * A[2] + M[4] * B[2] + M[5] * C[2] == 0.);
+    model->addConstr(M[3] * A[0] + M[4] * B[0] + M[5] * C[0] == 0.);
+    model->addConstr(M[3] * A[1] + M[4] * B[1] + M[5] * C[1] == 1.);
+    model->addConstr(M[3] * A[2] + M[4] * B[2] + M[5] * C[2] == 0.);
 
-  model.addConstr(M[6] * A[0] + M[7] * B[0] + M[8] * C[0] == 0.);
-  model.addConstr(M[6] * A[1] + M[7] * B[1] + M[8] * C[1] == 0.);
-  model.addConstr(M[6] * A[2] + M[7] * B[2] + M[8] * C[2] == 1.);
+    model->addConstr(M[6] * A[0] + M[7] * B[0] + M[8] * C[0] == 0.);
+    model->addConstr(M[6] * A[1] + M[7] * B[1] + M[8] * C[1] == 0.);
+    model->addConstr(M[6] * A[2] + M[7] * B[2] + M[8] * C[2] == 1.);
 
-  model.optimize();
-
-  ForIndex(i, 9) {
-    m[i] = M[i].get(GRB_DoubleAttr_X);
-  }
-
-  return m;
+    model->optimize();
+    ForIndex(i, 9) {
+        m[i] = M[i].get();
+    }
+    return m;
 }
 
 vector<uint>& TetMesh::tet_neighbours(uint t) {

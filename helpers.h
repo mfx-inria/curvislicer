@@ -112,7 +112,7 @@ float component_area(TetMesh& mesh, const vector<int>& surfaces)
 // --------------------------------------------------------------
 
 template<typename T_var>
-Tuple<GRBLinExpr, 3> tetrahedron_gradient(TetMesh& mesh, map<uint, T_var>& h, const Array<M3x3>& mats, uint t)
+Tuple<SLRExpr<double>, 3> tetrahedron_gradient(TetMesh& mesh, map<uint, T_var>& h, const Array<M3x3>& mats, uint t)
 {
   v4u tet = mesh.tetrahedronAt(t);
 
@@ -121,19 +121,19 @@ Tuple<GRBLinExpr, 3> tetrahedron_gradient(TetMesh& mesh, map<uint, T_var>& h, co
   T_var hc = h[tet[2]];
   T_var hd = h[tet[3]];
 
-  GRBLinExpr dhdx = (ha - hd) * mats[t][0]
+    SLRExpr<double> dhdx = (ha - hd) * mats[t][0]
                   + (hb - hd) * mats[t][1]
                   + (hc - hd) * mats[t][2];
 
-  GRBLinExpr dhdy = (ha - hd) * mats[t][3]
+    SLRExpr<double> dhdy = (ha - hd) * mats[t][3]
                   + (hb - hd) * mats[t][4]
                   + (hc - hd) * mats[t][5];
 
-  GRBLinExpr dhdz = (ha - hd) * mats[t][6]
+    SLRExpr<double> dhdz = (ha - hd) * mats[t][6]
                   + (hb - hd) * mats[t][7]
                   + (hc - hd) * mats[t][8];
 
-  return Tuple<GRBLinExpr, 3>(dhdx, dhdy, dhdz);
+  return Tuple<SLRExpr<double>, 3>(dhdx, dhdy, dhdz);
 }
 
 // --------------------------------------------------------------
@@ -182,18 +182,18 @@ void connected_components(TetMesh& mesh, const set<int>& surfaces_to_flatten, ve
 
 // ---------------------------------------------------------------
 
-double triangle_non_flatness(v3u tri, GRBModel *model)
+double triangle_non_flatness(v3u tri, SLRModel<double> *model)
 {
-  double va = model->getVarByName(sprint("z_%03d", tri[0])).get(GRB_DoubleAttr_X);
-  double vb = model->getVarByName(sprint("z_%03d", tri[1])).get(GRB_DoubleAttr_X);
-  double vc = model->getVarByName(sprint("z_%03d", tri[2])).get(GRB_DoubleAttr_X);
+  double va = model->getVarByName(sprint("z_%03d", tri[0])).get();
+  double vb = model->getVarByName(sprint("z_%03d", tri[1])).get();
+  double vc = model->getVarByName(sprint("z_%03d", tri[2])).get();
   double non_flatness = max((va - vb)*(va - vb), max((va - vc)*(va - vc), (vb - vc)*(vb - vc)));
   return non_flatness;
 }
 
 // --------------------------------------------------------------
 
-double component_non_flatness(TetMesh& mesh, const std::vector<int>& tris, GRBModel *model, double max_admissible)
+double component_non_flatness(TetMesh& mesh, const std::vector<int>& tris, SLRModel<double> *model, double max_admissible)
 {
   double non_flatness = 0.0, max_non_flatness = 0.0;
   double comp_area = 0.0;
