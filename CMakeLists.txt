@@ -1,28 +1,22 @@
 cmake_minimum_required(VERSION 2.6)
 project(curvislice)
 
+OPTION(CURVI_BUILD_WITH_GRB  "Build with GRB (stable solver)" OFF)
+
 add_subdirectory(libs/SolverWrapper)
 
 INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/libs/LibSL-small/src
         ${PROJECT_SOURCE_DIR}/libs/LibSL-small/src/LibSL
-        $ENV{GUROBI_HOME}/include
         ${PROJECT_SOURCE_DIR}/libs/tclap/include/
-        ${PROJECT_SOURCE_DIR}/libs/osqp/include/
         ${PROJECT_SOURCE_DIR}/libs/SolverWrapper/include/
         ${PROJECT_SOURCE_DIR}/libs/SolverWrapper/src/
-)
-
-link_directories(
-        $ENV{GUROBI_HOME}/lib/
 )
 
 CONFIGURE_FILE(
         "${CMAKE_CURRENT_SOURCE_DIR}/path.h.in"
         "${CMAKE_CURRENT_SOURCE_DIR}/path.h"
 )
-
-
 
 SET(LIBSL_SOURCES
         libs/LibSL-small/src/LibSL/Math/Math.cpp
@@ -54,31 +48,34 @@ ADD_EXECUTABLE(curvislice_osqp
         ${LIBSL_SOURCES}
         )
 
-ADD_EXECUTABLE(curvislice_grb
-        main.cpp
-        gcode.h
-        gcode.cpp
-        helpers.h
-        TetMesh.h
-        TetMesh.cpp
-        thicknesses.h
-        MeshFormat_msh.h
-        MeshFormat_msh.cpp
-        ${LIBSL_SOURCES}
-        )
+if (CURVI_BUILD_WITH_GRB)
+    ADD_EXECUTABLE(curvislice_grb
+            main.cpp
+            gcode.h
+            gcode.cpp
+            helpers.h
+            TetMesh.h
+            TetMesh.cpp
+            thicknesses.h
+            MeshFormat_msh.h
+            MeshFormat_msh.cpp
+            ${LIBSL_SOURCES}
+            )
 
 
-ADD_EXECUTABLE(uncurve
-        uncurve.cpp
-        gcode.h
-        gcode.cpp
-        TetMesh.h
-        TetMesh.cpp
-        thicknesses.h
-        MeshFormat_msh.h
-        MeshFormat_msh.cpp
-        ${LIBSL_SOURCES}
-        )
+    ADD_EXECUTABLE(uncurve
+            uncurve.cpp
+            gcode.h
+            gcode.cpp
+            TetMesh.h
+            TetMesh.cpp
+            thicknesses.h
+            MeshFormat_msh.h
+            MeshFormat_msh.cpp
+            ${LIBSL_SOURCES}
+            )
+endif(CURVI_BUILD_WITH_GRB)
+
 
 ADD_EXECUTABLE(reorient
         reorient.cpp
@@ -91,9 +88,12 @@ ADD_EXECUTABLE(subdiv
         )
 
 target_compile_options(curvislice_osqp PRIVATE -DOSQP)
-target_compile_options(curvislice_grb PRIVATE -DGRB)
 
-target_compile_options(uncurve PRIVATE -DGRB)
+if (CURVI_BUILD_WITH_GRB)
+    target_compile_options(curvislice_grb PRIVATE -DGRB)
+    target_compile_options(uncurve PRIVATE -DGRB)
+endif(CURVI_BUILD_WITH_GRB)
+
 
 if(WIN32)
     target_link_libraries(curvislice_osqp shlwapi osqpstatic SolverWrapper)
@@ -109,33 +109,30 @@ if(WIN32)
     target_link_libraries(uncurve optimized gurobi_c++md2017)
 else()
     find_package(osqp REQUIRED)
-    include_directories(/usr/local/include/osqp/)
-    target_link_libraries(curvislice_osqp libosqp.a)
-    target_link_libraries(curvislice_osqp ${CMAKE_DL_LIBS})
-
     target_link_libraries(curvislice_osqp SolverWrapper)
 
-    target_link_libraries(curvislice_grb SolverWrapper)
-    target_link_libraries(curvislice_grb -L/$ENV{GUROBI_HOME}/lib/ -lgurobi_c++ -lgurobi81)
-
-    target_link_libraries(uncurve SolverWrapper)
-    target_link_libraries(uncurve -L/$ENV{GUROBI_HOME}/lib/ -lgurobi_c++ -lgurobi81)
+    if (CURVI_BUILD_WITH_GRB)
+        target_link_libraries(curvislice_grb SolverWrapper)
+        target_link_libraries(uncurve SolverWrapper)
+    endif(CURVI_BUILD_WITH_GRB)
 endif(WIN32)
 
 set_target_properties(curvislice_osqp PROPERTIES
         CXX_STANDARD 17
         CXX_EXTENSIONS OFF
         )
+if (CURVI_BUILD_WITH_GRB)
+    set_target_properties(curvislice_grb PROPERTIES
+            CXX_STANDARD 17
+            CXX_EXTENSIONS OFF
+            )
 
-set_target_properties(curvislice_grb PROPERTIES
-        CXX_STANDARD 17
-        CXX_EXTENSIONS OFF
-        )
+    set_target_properties(uncurve PROPERTIES
+            CXX_STANDARD 17
+            CXX_EXTENSIONS OFF
+            )
+endif(CURVI_BUILD_WITH_GRB)
 
-set_target_properties(uncurve PROPERTIES
-        CXX_STANDARD 17
-        CXX_EXTENSIONS OFF
-        )
 
 set_target_properties(reorient PROPERTIES
         CXX_STANDARD 17
@@ -146,9 +143,16 @@ INSTALL(TARGETS curvislice_osqp
         RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
         )
 
-INSTALL(TARGETS curvislice_grb
-        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-        )
+if (CURVI_BUILD_WITH_GRB)
+    INSTALL(TARGETS curvislice_grb
+            RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+            )
+
+    INSTALL(TARGETS uncurve
+            RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+            )
+endif(CURVI_BUILD_WITH_GRB)
+
 
 INSTALL(TARGETS reorient
         RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
@@ -158,6 +162,4 @@ INSTALL(TARGETS subdiv
         RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
         )
 
-INSTALL(TARGETS uncurve
-        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-        )
+
