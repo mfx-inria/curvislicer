@@ -74,7 +74,7 @@ int target_num_layers = -1;
 float layer_thickness = default_layer_thickness;
 
 float compute_time = 0.0f; // time for a compute iteration (0 = no limit)
-int     nb_threads = 8;
+int     nb_threads = 4;
 
 bool  fabricable_emptiness = false;
 
@@ -333,11 +333,10 @@ bool gurobi_opt(
     AutoPtr<SLRModel<double>> model(new SLRModel<double>());
 
     // TODO
-    /*model->set(GRB_DoubleParam_TimeLimit, compute_time);
-    model->set(GRB_IntParam_Threads, nb_threads);
-    model->set(GRB_IntParam_Presolve, PRESOLVE);
-    model->set(GRB_IntParam_OutputFlag, true);*/
-
+    model->setTimeLimit(compute_time);
+    model->setNbThread(nb_threads);
+    model->setPresolve(PRESOLVE);
+    model->printDebug(true);
     // Create variables
     map<uint, SLRVar<double>> h;
     ForIndex(i, mesh.numVertices()) {

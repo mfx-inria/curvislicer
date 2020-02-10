@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(curvislice)
 
-OPTION(CURVI_BUILD_WITH_GRB  "Build with GRB (stable solver)" OFF)
+OPTION(CURVI_BUILD_WITH_GRB  "Build with GRB (stable solver)" ON)
 
 add_subdirectory(libs/SolverWrapper)
 
@@ -108,7 +108,6 @@ if(WIN32)
     target_link_libraries(uncurve debug gurobi_c++mdd2017)
     target_link_libraries(uncurve optimized gurobi_c++md2017)
 else()
-    find_package(osqp REQUIRED)
     target_link_libraries(curvislice_osqp SolverWrapper)
 
     if (CURVI_BUILD_WITH_GRB)
