@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(curvislice)
 
-OPTION(CURVI_BUILD_WITH_GRB  "Build with GRB (stable solver)" ON)
+OPTION(CURVI_BUILD_WITH_GRB  "Build with GRB (stable solver)" OFF)
 
 add_subdirectory(libs/SolverWrapper)
 
