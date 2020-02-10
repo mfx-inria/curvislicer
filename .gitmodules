@@ -5,3 +5,4 @@
 [submodule "libs/SolverWrapper"]
 	path = libs/SolverWrapper
 	url = https://github.com/bedela-Epitech/SolverWrapper.git
+	branch = master

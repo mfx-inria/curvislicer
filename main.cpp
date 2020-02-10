@@ -332,11 +332,11 @@ bool gurobi_opt(
     cout << "Creating the model ... ";
     AutoPtr<SLRModel<double>> model(new SLRModel<double>());
 
-    // TODO
     model->setTimeLimit(compute_time);
     model->setNbThread(nb_threads);
     model->setPresolve(PRESOLVE);
     model->printDebug(true);
+
     // Create variables
     map<uint, SLRVar<double>> h;
     ForIndex(i, mesh.numVertices()) {
@@ -1044,8 +1044,11 @@ int main(int argc, char **argv)
             ForArray(displ, i) {
                 tmp.vertexAt(i)[2] = displ[i];
             }
-
-            tmp.save((folder + "/after.stl").c_str(), &tmp);
+#ifdef GRB
+            tmp.save((folder + "/afterGRB.stl").c_str(), &tmp);
+#elif OSQP
+            tmp.save((folder + "/afterOSQP.stl").c_str(), &tmp);
+#endif
             saveArray(displ, (folder + "/displacements").c_str());
 
             ///////////////////////////////////////
