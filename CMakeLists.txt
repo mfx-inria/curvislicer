@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(curvislice)
 
-OPTION(CURVI_BUILD_WITH_GRB  "Build with GRB (stable solver)" OFF)
-
 add_subdirectory(libs/SolverWrapper)
 
 INCLUDE_DIRECTORIES(
@@ -48,7 +46,7 @@ ADD_EXECUTABLE(curvislice_osqp
         ${LIBSL_SOURCES}
         )
 
-if (CURVI_BUILD_WITH_GRB)
+if (BUILD_WITH_GRB)
     ADD_EXECUTABLE(curvislice_grb
             main.cpp
             gcode.h
@@ -74,7 +72,7 @@ if (CURVI_BUILD_WITH_GRB)
             MeshFormat_msh.cpp
             ${LIBSL_SOURCES}
             )
-endif(CURVI_BUILD_WITH_GRB)
+endif(BUILD_WITH_GRB)
 
 
 ADD_EXECUTABLE(reorient
@@ -89,48 +87,48 @@ ADD_EXECUTABLE(subdiv
 
 target_compile_options(curvislice_osqp PRIVATE -DOSQP)
 
-if (CURVI_BUILD_WITH_GRB)
+if (BUILD_WITH_GRB)
     target_compile_options(curvislice_grb PRIVATE -DGRB)
-    target_compile_options(uncurve PRIVATE -DGRB)
-endif(CURVI_BUILD_WITH_GRB)
+    #target_compile_options(uncurve PRIVATE -DGRB)
+	 target_compile_definitions(
+		curvislice_grb PUBLIC "-DHAS_GUROBI"
+	)
+endif(BUILD_WITH_GRB)
 
 
 if(WIN32)
-    target_link_libraries(curvislice_osqp shlwapi osqpstatic SolverWrapper)
-
-    target_link_libraries(curvislice_grb shlwapi gurobi81)
-    target_link_libraries(curvislice_grb debug gurobi_c++mdd2017)
-    target_link_libraries(curvislice_grb optimized gurobi_c++md2017)
+    if (BUILD_WITH_GRB)
+        target_link_libraries(curvislice_grb shlwapi SolverWrapper)
+    endif(BUILD_WITH_GRB)
+    target_link_libraries(curvislice_osqp shlwapi SolverWrapper)
 
     target_link_libraries(reorient shlwapi)
     target_link_libraries(subdiv shlwapi)
-    target_link_libraries(uncurve shlwapi gurobi81)
-    target_link_libraries(uncurve debug gurobi_c++mdd2017)
-    target_link_libraries(uncurve optimized gurobi_c++md2017)
+    #target_link_libraries(uncurve shlwapi)
 else()
     target_link_libraries(curvislice_osqp SolverWrapper)
 
-    if (CURVI_BUILD_WITH_GRB)
+    if (BUILD_WITH_GRB)
         target_link_libraries(curvislice_grb SolverWrapper)
-        target_link_libraries(uncurve SolverWrapper)
-    endif(CURVI_BUILD_WITH_GRB)
+        #target_link_libraries(uncurve SolverWrapper)
+    endif(BUILD_WITH_GRB)
 endif(WIN32)
 
 set_target_properties(curvislice_osqp PROPERTIES
         CXX_STANDARD 17
         CXX_EXTENSIONS OFF
         )
-if (CURVI_BUILD_WITH_GRB)
+if (BUILD_WITH_GRB)
     set_target_properties(curvislice_grb PROPERTIES
             CXX_STANDARD 17
             CXX_EXTENSIONS OFF
             )
 
-    set_target_properties(uncurve PROPERTIES
-            CXX_STANDARD 17
-            CXX_EXTENSIONS OFF
-            )
-endif(CURVI_BUILD_WITH_GRB)
+    #set_target_properties(uncurve PROPERTIES
+    #        CXX_STANDARD 17
+    #        CXX_EXTENSIONS OFF
+    #        )
+endif(BUILD_WITH_GRB)
 
 
 set_target_properties(reorient PROPERTIES
@@ -142,15 +140,15 @@ INSTALL(TARGETS curvislice_osqp
         RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
         )
 
-if (CURVI_BUILD_WITH_GRB)
+if (BUILD_WITH_GRB)
     INSTALL(TARGETS curvislice_grb
             RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
             )
 
-    INSTALL(TARGETS uncurve
-            RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-            )
-endif(CURVI_BUILD_WITH_GRB)
+    #INSTALL(TARGETS uncurve
+    #        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+    #        )
+endif(BUILD_WITH_GRB)
 
 
 INSTALL(TARGETS reorient
