@@ -18,6 +18,8 @@ using namespace std;
 #include "TetMesh.h"
 #include "MeshFormat_msh.h"
 
+#include "Model.h"
+
 // --------------------------------------------------------------
 
 #include "thicknesses.h"
@@ -263,32 +265,30 @@ typedef struct {
 
 // --------------------------------------------------------------
 
-#include "gurobi_c++.h"
 
 void reflow(std::vector<t_step>& _steps)
 {
   const double max_e_delta = 1.0;
 
   // optimize flow
-  std::vector<GRBVar> vars;
+  std::vector<SLRVar<double>> vars;
   vars.resize(2*_steps.size());
 
   // configure gurobi env
-  GRBEnv env = GRBEnv();
-  AutoPtr<GRBModel> model(new GRBModel(env));
+  AutoPtr<SLRModel<double>> model(new SLRModel<double>());
 
-  model->set(GRB_DoubleParam_TimeLimit, 600);
-  model->set(GRB_IntParam_Threads, 8);
-  model->set(GRB_IntParam_Presolve, -1);
-  model->set(GRB_IntParam_OutputFlag, true);
+  model->setTimeLimit(600);
+  //model->setNbThread(8);
+  model->setPresolve(-1);
+  model->printDebug(true);
 
   double e_start = _steps.front().e;
 
   // vars
   ForIndex(i,_steps.size()) {
     if (_steps[i].type == e_Print) {
-      vars[i]               = model->addVar(0.0, (_steps.back().e - e_start) * 2.0f, 0.0, GRB_CONTINUOUS, sprint("e_%03d", i));
-      vars[i+_steps.size()] = model->addVar(0.0, (_steps.back().e - e_start) * 2.0f, 0.0, GRB_CONTINUOUS, sprint("a_%03d", i));
+      vars[i]               = model->addVar(0.0, (_steps.back().e - e_start) * 2.0f, 0.0, sprint("e_%03d", i));
+      vars[i+_steps.size()] = model->addVar(0.0, (_steps.back().e - e_start) * 2.0f, 0.0, sprint("a_%03d", i));
     }
   }
 
@@ -296,8 +296,8 @@ void reflow(std::vector<t_step>& _steps)
 
   // constraints
 #if 1
-  GRBVar e_i_m_1;
-  GRBVar a_i_m_1;
+  SLRVar<double> e_i_m_1;
+  SLRVar<double> a_i_m_1;
   bool first = true;
   v3f prev_pos;
   ForIndex(i, _steps.size()) {
@@ -325,7 +325,7 @@ void reflow(std::vector<t_step>& _steps)
 
   // objective for reflow
   double      w_min = 0.0001;
-  GRBQuadExpr obj   = 0.0f;
+  SLRExpr<double> obj   = 0.0f;
   unordered_map<int, double> weights;
   Console::progressTextInit((int)_steps.size());
   ForIndex(i, _steps.size()) {
@@ -350,13 +350,14 @@ void reflow(std::vector<t_step>& _steps)
   float e = 0.0f;
   ForIndex(i, _steps.size()) {
     if (_steps[i].type == e_Print) {
-      float v = (float)vars[i].get(GRB_DoubleAttr_X);
+      float v = (float)vars[i].get();
       e       = v; // _steps[i].e;
     }
     _steps[i].e = e;
   }
 
 }
+
 
 // --------------------------------------------------------------
 
@@ -804,7 +805,7 @@ int main(int argc, char **argv)
     } else {
       std::cerr << "nothing to do ..." << std::endl;
     }
-  } catch (GRBException& e) {
+  } catch (SLRException& e) {
     cerr << "[ERROR] " << e.getMessage() << endl;
   } catch (Fatal& e) {
     cerr << "[ERROR] " << e.message() << endl;

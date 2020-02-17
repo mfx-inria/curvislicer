@@ -11,6 +11,8 @@ z_offset   = 0.0
 
 priming_mm_per_sec = 40
 
+
+z_layer_height_mm = 0.3
 z_layer_height_mm_min = 0.01
 z_layer_height_mm_max = 10.0
 
