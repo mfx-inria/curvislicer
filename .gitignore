@@ -1,0 +1,11 @@
+bin/
+models/
+scratch/
+results/
+build/
+
+*.bat
+*.gcode
+*.lua
+
+path.h

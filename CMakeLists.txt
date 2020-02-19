@@ -59,20 +59,27 @@ if (BUILD_WITH_GRB)
             MeshFormat_msh.cpp
             ${LIBSL_SOURCES}
             )
-
-
-    ADD_EXECUTABLE(uncurve
-            uncurve.cpp
-            gcode.h
-            gcode.cpp
-            TetMesh.h
-            TetMesh.cpp
-            thicknesses.h
-            MeshFormat_msh.h
-            MeshFormat_msh.cpp
-            ${LIBSL_SOURCES}
-            )
 endif(BUILD_WITH_GRB)
+
+ADD_EXECUTABLE(uncurve
+        uncurve.cpp
+        gcode.h
+        gcode.cpp
+        TetMesh.h
+        TetMesh.cpp
+        thicknesses.h
+        MeshFormat_msh.h
+        MeshFormat_msh.cpp
+        ${LIBSL_SOURCES}
+)
+target_link_libraries(uncurve SolverWrapper)
+set_target_properties(uncurve PROPERTIES
+            CXX_STANDARD 17
+            CXX_EXTENSIONS OFF
+            )
+INSTALL(TARGETS uncurve
+            RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+            )
 
 
 ADD_EXECUTABLE(reorient
@@ -85,14 +92,17 @@ ADD_EXECUTABLE(subdiv
         ${LIBSL_SOURCES}
         )
 
-target_compile_options(curvislice_osqp PRIVATE -DOSQP)
+
 
 if (BUILD_WITH_GRB)
     target_compile_options(curvislice_grb PRIVATE -DGRB)
-    #target_compile_options(uncurve PRIVATE -DGRB)
+    target_compile_options(uncurve PRIVATE -DGRB)
 	 target_compile_definitions(
 		curvislice_grb PUBLIC "-DHAS_GUROBI"
 	)
+else(BUILD_WITH_GRB)
+    target_compile_options(curvislice_osqp PRIVATE -DOSQP)
+    target_compile_options(uncurve PRIVATE -DOSQP)
 endif(BUILD_WITH_GRB)
 
 
@@ -104,13 +114,11 @@ if(WIN32)
 
     target_link_libraries(reorient shlwapi)
     target_link_libraries(subdiv shlwapi)
-    #target_link_libraries(uncurve shlwapi)
 else()
     target_link_libraries(curvislice_osqp SolverWrapper)
 
     if (BUILD_WITH_GRB)
         target_link_libraries(curvislice_grb SolverWrapper)
-        #target_link_libraries(uncurve SolverWrapper)
     endif(BUILD_WITH_GRB)
 endif(WIN32)
 
@@ -123,11 +131,6 @@ if (BUILD_WITH_GRB)
             CXX_STANDARD 17
             CXX_EXTENSIONS OFF
             )
-
-    #set_target_properties(uncurve PROPERTIES
-    #        CXX_STANDARD 17
-    #        CXX_EXTENSIONS OFF
-    #        )
 endif(BUILD_WITH_GRB)
 
 
@@ -144,10 +147,6 @@ if (BUILD_WITH_GRB)
     INSTALL(TARGETS curvislice_grb
             RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
             )
-
-    #INSTALL(TARGETS uncurve
-    #        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-    #        )
 endif(BUILD_WITH_GRB)
 
 
