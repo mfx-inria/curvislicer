@@ -12,7 +12,7 @@ INCLUDE_DIRECTORIES(
 )
 
 CONFIGURE_FILE(
-        "${CMAKE_CURRENT_SOURCE_DIR}/path.h.in"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/path.h.in"
         "${CMAKE_CURRENT_SOURCE_DIR}/path.h"
 )
 
@@ -33,129 +33,136 @@ SET(LIBSL_SOURCES
         libs/LibSL-small/src/loki/TypeManip.h
         )
 
+####################################
+        
 ADD_EXECUTABLE(curvislice_osqp
-        main.cpp
-        gcode.h
-        gcode.cpp
-        helpers.h
-        TetMesh.h
-        TetMesh.cpp
-        thicknesses.h
-        MeshFormat_msh.h
-        MeshFormat_msh.cpp
+        src/main.cpp
+        src/gcode.h
+        src/gcode.cpp
+        src/helpers.h
+        src/TetMesh.h
+        src/TetMesh.cpp
+        src/thicknesses.h
+        src/MeshFormat_msh.h
+        src/MeshFormat_msh.cpp
         ${LIBSL_SOURCES}
         )
+        
+INSTALL(
+  TARGETS curvislice_osqp
+  RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+)
+
+set_target_properties(curvislice_osqp
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)
+
+target_link_libraries(curvislice_osqp SolverWrapper)
+
+target_compile_options(curvislice_osqp PRIVATE -DOSQP)
+
+####################################
 
 if (BUILD_WITH_GRB)
-    ADD_EXECUTABLE(curvislice_grb
-            main.cpp
-            gcode.h
-            gcode.cpp
-            helpers.h
-            TetMesh.h
-            TetMesh.cpp
-            thicknesses.h
-            MeshFormat_msh.h
-            MeshFormat_msh.cpp
-            ${LIBSL_SOURCES}
-            )
+  ADD_EXECUTABLE(curvislice_grb
+    src/main.cpp
+    src/gcode.h
+    src/gcode.cpp
+    src/helpers.h
+    src/TetMesh.h
+    src/TetMesh.cpp
+    src/thicknesses.h
+    src/MeshFormat_msh.h
+    src/MeshFormat_msh.cpp
+    ${LIBSL_SOURCES}
+  )
+
+  INSTALL(
+    TARGETS curvislice_grb
+    RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+  )
+
+  set_target_properties(curvislice_grb
+    PROPERTIES
+      CXX_STANDARD 17
+      CXX_EXTENSIONS OFF
+  )
+  
+  target_link_libraries(curvislice_grb SolverWrapper)
+  
+  target_compile_options(curvislice_grb PRIVATE -DGRB)
+  target_compile_definitions(curvislice_grb PUBLIC "-DHAS_GUROBI")
 endif(BUILD_WITH_GRB)
+
+####################################
 
 ADD_EXECUTABLE(uncurve
-        uncurve.cpp
-        gcode.h
-        gcode.cpp
-        TetMesh.h
-        TetMesh.cpp
-        thicknesses.h
-        MeshFormat_msh.h
-        MeshFormat_msh.cpp
-        ${LIBSL_SOURCES}
+  src/uncurve.cpp
+  src/gcode.h
+  src/gcode.cpp
+  src/TetMesh.h
+  src/TetMesh.cpp
+  src/thicknesses.h
+  src/MeshFormat_msh.h
+  src/MeshFormat_msh.cpp
+  ${LIBSL_SOURCES}
 )
-target_link_libraries(uncurve SolverWrapper)
-set_target_properties(uncurve PROPERTIES
-            CXX_STANDARD 17
-            CXX_EXTENSIONS OFF
-            )
-INSTALL(TARGETS uncurve
-            RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-            )
 
+INSTALL(
+  TARGETS uncurve
+  RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+)
+
+set_target_properties(uncurve
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)
+
+target_link_libraries(uncurve SolverWrapper)
+
+if(BUILD_WITH_GRB)
+  target_compile_options(uncurve PRIVATE -DGRB)
+endif(BUILD_WITH_GRB)
+
+####################################
 
 ADD_EXECUTABLE(reorient
-        reorient.cpp
-        ${LIBSL_SOURCES}
-        )
+  src/reorient.cpp
+  ${LIBSL_SOURCES}
+)
+INSTALL(
+  TARGETS reorient
+  RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+)
+set_target_properties(reorient
+  PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+)
+
+####################################
 
 ADD_EXECUTABLE(subdiv
-        subdiv.cpp
-        ${LIBSL_SOURCES}
-        )
+  src/subdiv.cpp
+  ${LIBSL_SOURCES}
+)
+INSTALL(
+  TARGETS subdiv
+  RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
+)
 
-
-
-if (BUILD_WITH_GRB)
-    target_compile_options(curvislice_grb PRIVATE -DGRB)
-    target_compile_options(uncurve PRIVATE -DGRB)
-	 target_compile_definitions(
-		curvislice_grb PUBLIC "-DHAS_GUROBI"
-	)
-else(BUILD_WITH_GRB)
-    target_compile_options(curvislice_osqp PRIVATE -DOSQP)
-    target_compile_options(uncurve PRIVATE -DOSQP)
-endif(BUILD_WITH_GRB)
+####################################
 
 
 if(WIN32)
-    if (BUILD_WITH_GRB)
-        target_link_libraries(curvislice_grb shlwapi SolverWrapper)
-    endif(BUILD_WITH_GRB)
-    target_link_libraries(curvislice_osqp shlwapi SolverWrapper)
-
-    target_link_libraries(reorient shlwapi)
-    target_link_libraries(subdiv shlwapi)
-else()
-    target_link_libraries(curvislice_osqp SolverWrapper)
-
-    if (BUILD_WITH_GRB)
-        target_link_libraries(curvislice_grb SolverWrapper)
-    endif(BUILD_WITH_GRB)
+  if (BUILD_WITH_GRB)
+    target_link_libraries(curvislice_grb shlwapi)
+  endif(BUILD_WITH_GRB)
+  target_link_libraries(curvislice_osqp shlwapi)
+  target_link_libraries(reorient shlwapi)
+  target_link_libraries(subdiv shlwapi)
+  target_link_libraries(uncurve shlwapi)
 endif(WIN32)
-
-set_target_properties(curvislice_osqp PROPERTIES
-        CXX_STANDARD 17
-        CXX_EXTENSIONS OFF
-        )
-if (BUILD_WITH_GRB)
-    set_target_properties(curvislice_grb PROPERTIES
-            CXX_STANDARD 17
-            CXX_EXTENSIONS OFF
-            )
-endif(BUILD_WITH_GRB)
-
-
-set_target_properties(reorient PROPERTIES
-        CXX_STANDARD 17
-        CXX_EXTENSIONS OFF
-        )
-
-INSTALL(TARGETS curvislice_osqp
-        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-        )
-
-if (BUILD_WITH_GRB)
-    INSTALL(TARGETS curvislice_grb
-            RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-            )
-endif(BUILD_WITH_GRB)
-
-
-INSTALL(TARGETS reorient
-        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-        )
-
-INSTALL(TARGETS subdiv
-        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-        )
-
-
