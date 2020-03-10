@@ -33,7 +33,6 @@ the distribution, please refer to it for details.
 
 // --------------------------------------------------------------
 using namespace std;
-// --------------------------------------------------------------
 
 const float retract_e_length_mm = 6.0f;
 const float min_speed_mm_sec    = 10.0f;
