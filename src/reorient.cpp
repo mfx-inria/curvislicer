@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 #include <algorithm>
 #include <LibSL/LibSL.h>
 #include <LibSL/Memory/ArrayTools.h>
@@ -21,11 +33,11 @@ int main(int argc, char **argv)
   ForIndex(t, mesh->numTriangles()) {
     bool bottom = true;
     v3d pts[3];
-    ForIndex(i, 3) { 
-      v3d pt = v3d(mesh->posAt(mesh->triangleAt(t)[i])); 
+    ForIndex(i, 3) {
+      v3d pt = v3d(mesh->posAt(mesh->triangleAt(t)[i]));
       if (abs(pt[2] - bx.minCorner()[2]) > 1e-3f) {
         bottom = false;
-      }    
+      }
       pts[i] = pt;
     }
     if (bottom) {

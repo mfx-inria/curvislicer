@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 #include <algorithm>
 #include <LibSL/LibSL.h>
 #include <LibSL/LibSL.h>
@@ -50,7 +62,7 @@ float layer_thickness = default_layer_thickness;
 
 // --------------------------------------------------------------
 
-float tetrahedron_volume(const Tuple<v3f, 4>& tet) 
+float tetrahedron_volume(const Tuple<v3f, 4>& tet)
 {
 
   v3f vab = tet[1] - tet[0];
@@ -65,7 +77,7 @@ float tetrahedron_volume(const Tuple<v3f, 4>& tet)
 
 // --------------------------------------------------------------
 
-float tetrahedron_volume(TetMesh& mesh, const v4u& tet) 
+float tetrahedron_volume(TetMesh& mesh, const v4u& tet)
 {
   return tetrahedron_volume(Tuple<v3f, 4>(mesh.vertexAt(tet[0]), mesh.vertexAt(tet[1]), mesh.vertexAt(tet[2]), mesh.vertexAt(tet[3])));
 }
@@ -98,7 +110,7 @@ v4f tetrahedron_barycenter_coefs(const Tuple<v3f, 4>& tet, v3f pt)
 
 // --------------------------------------------------------------
 
-float triangle_area(const Tuple<v3f, 3>& tri) 
+float triangle_area(const Tuple<v3f, 3>& tri)
 {
 
   v3f vab = tri[1] - tri[0];
@@ -111,7 +123,7 @@ float triangle_area(const Tuple<v3f, 3>& tri)
 
 // --------------------------------------------------------------
 
-float triangle_area(TetMesh& mesh, const v3u& tri) 
+float triangle_area(TetMesh& mesh, const v3u& tri)
 {
   return triangle_area(Tuple<v3f, 3>(mesh.vertexAt(tri[0]), mesh.vertexAt(tri[1]), mesh.vertexAt(tri[2])));
 }
@@ -142,13 +154,13 @@ inline bool isInTetrahedron(const Tuple<v3f, 4>& tet, const v3f& pt)
     }
   }
   return true;
-  
+
   /*
   return sameSide(tet[0], tet[1], tet[2], tet[3], pt) &&
          sameSide(tet[1], tet[2], tet[3], tet[0], pt) &&
          sameSide(tet[2], tet[3], tet[0], tet[1], pt) &&
          sameSide(tet[3], tet[0], tet[1], tet[2], pt);
-    */     
+    */
 }
 
 // --------------------------------------------------------------
@@ -176,7 +188,7 @@ Array3D<vector<int>> tet_location;
 v3f                  split; // bad name, but just for here
 AABox                meshbox;
 
-AABox getBBox(Tuple<v3f, 4> tet) 
+AABox getBBox(Tuple<v3f, 4> tet)
 {
   AABox bbox;
   ForIndex(i, 4) {
@@ -231,7 +243,7 @@ int find_containing_tet(TetMesh* mesh, v3f& pt, bool use_in_and_out)
   int itet_empty_containing = -1;
 
   for (int itet : tets) {
-    
+
     Tuple<v3f, 4> tet;
 
     ForIndex(i, 4) {
@@ -361,12 +373,12 @@ void reflow(std::vector<t_step>& _steps)
 
 // --------------------------------------------------------------
 
-void inv_curv(TetMesh* mesh, string folder, string filename) 
+void inv_curv(TetMesh* mesh, string filepath)
 {
 
   // inverse displacement
   Array<float> h;
-  loadArray(h, (folder + "/displacements").c_str());
+  loadArray(h, (filepath + "/displacements").c_str());
 
   TetMesh* mesh_crv = new TetMesh(mesh);
   ForArray(h, i) {
@@ -374,9 +386,9 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
   }
 
   Array<Tuple<double, 9>> mats;
-  loadArray(mats, (folder + "/tetmats").c_str());
+  loadArray(mats, (filepath + "/tetmats").c_str());
 
-  std::string gcode = loadFileIntoString((folder + "/tmp.gcode").c_str());
+  std::string gcode = loadFileIntoString((filepath + ".gcode").c_str());
 
   gcode_start(gcode.c_str());
 
@@ -412,7 +424,7 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
   if (deltaP) {
     centering = - 75.0f;
   }
-  
+
   ////////////////////////////
 
   v4f pos, prev_pos;
@@ -580,7 +592,7 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
   cerr << "num steps: " << steps.size() << endl;
 
   ////////////////////////////////////////////////////////
-  
+
   if (do_reflow) {
 #if 1
 
@@ -593,7 +605,7 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
     double e_prev = 0.0;
     int i = 0;
     while (i < steps.size()) {
-      
+
       std::vector< t_step > sub_steps;
       while (steps[i].type != e_Retract && i < steps.size()) {
         sub_steps.push_back(steps[i]);
@@ -611,7 +623,7 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
 
       new_steps.insert(new_steps.end(), sub_steps.begin(), sub_steps.end());
     }
-   
+
     steps = new_steps;
 #endif
   }
@@ -620,7 +632,7 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
 
   LIBSL_TRACE;
 
-  std::ofstream out_gcode((folder + "/result.gcode").c_str(), ios::out | ios::trunc);
+  std::ofstream out_gcode((filepath + ".gcode").c_str(), ios::out | ios::trunc);
   if (!out_gcode) {
     std::cerr << "Erreur � l'ouverture !" << endl;
     return;
@@ -649,7 +661,7 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
       continue;
     } else {
 
-      if (step.type == e_Print) {        
+      if (step.type == e_Print) {
 
         float w = min(1.0f, length(step.xyz - v3f(prev_pos)) / SAMPLING);
         prev_pos = v4f(step.xyz);
@@ -694,11 +706,11 @@ void inv_curv(TetMesh* mesh, string folder, string filename)
 
 // --------------------------------------------------------------
 
-void inv_deform(TetMesh* mesh, string folder, string filename)
+void inv_deform(TetMesh* mesh, string path)
 {
   // inverse displacement
   Array<float> h;
-  loadArray(h, (folder + "/displacements").c_str());
+  loadArray(h, (path + "/displacements").c_str());
 
   TetMesh* mesh_crv = new TetMesh(mesh);
   ForArray(h, i) {
@@ -707,7 +719,7 @@ void inv_deform(TetMesh* mesh, string folder, string filename)
 
   AABox bbox = mesh_crv->getBBox();
 
-  TriangleMesh *stl = loadTriangleMesh((folder + "/tmp_" + filename + ".stl").c_str());
+  TriangleMesh *stl = loadTriangleMesh((path + ".stl").c_str());
 
   ForIndex(v, stl->numVertices()) {
 
@@ -731,19 +743,20 @@ void inv_deform(TetMesh* mesh, string folder, string filename)
   }
 
   MeshFormat_stl meshformat;
-  meshformat.save((folder + "/result.stl").c_str(), stl);
+  meshformat.save((path + "/uncurved.stl").c_str(), stl);
 }
 
 // --------------------------------------------------------------
 
 int main(int argc, char **argv)
 {
-  string path_models = SRC_PATH;
+  string path = SRC_PATH;
 
   // command line
   TCLAP::CmdLine cmd("", ' ', "1.0");
-  TCLAP::UnlabeledValueArg<std::string>  dirArg("d", "dir", true, "models\\", "directory name");
-  TCLAP::UnlabeledValueArg<std::string> fileArg("f", "file", true, "filename", "file name");
+  TCLAP::UnlabeledValueArg<std::string>  dirArg("d", "path", true, ".", "path");
+
+  TCLAP::ValueArg<float>   layerThArg("l", "layer-thickness", "Layer thickness (mm)", false, default_layer_thickness, "float");
 
   TCLAP::SwitchArg invArg("g", "gcode", "generate curved gcode", true);
   TCLAP::SwitchArg stlArg("s", "stl", "generate stl from msh with deformations", true);
@@ -760,21 +773,21 @@ int main(int argc, char **argv)
   cmd.add(deltaArg);
   cmd.add(rflwArg);
   cmd.add(simArg);
-  
+
+  cmd.add(layerThArg);
   cmd.add(dirArg);
-  cmd.add(fileArg);
 
   cmd.parse(argc, argv);
 
-  path_models = dirArg  .getValue();
-  filename    = fileArg .getValue();
-  um2         = um2Arg  .getValue();
-  a8          = a8Arg   .getValue();
-  deltaP      = deltaArg.getValue();
-  do_reflow   = rflwArg .getValue();
-  do_sim      = simArg  .getValue();
+  path          = dirArg  .getValue();
+  max_thickness = layerThArg.getValue();
+  um2           = um2Arg  .getValue();
+  a8            = a8Arg   .getValue();
+  deltaP        = deltaArg.getValue();
+  do_reflow     = rflwArg .getValue();
+  do_sim        = simArg  .getValue();
 
-  if (a8) {
+  /*if (a8) {
     max_thickness = 0.4f;
     layer_thickness = max_thickness;
     min_thickness = max_thickness / 6.0f;
@@ -788,20 +801,23 @@ int main(int argc, char **argv)
     min_thickness   = max_thickness / 6.0f;
   } else {
     sl_assert(false);
-  }
+  }*/
 
   /////////////////////////////
 
-  string folder = path_models + removeExtensionFromFileName(filename);
+  layer_thickness = max_thickness;
+  min_thickness = max_thickness / 6.0f;
+
+  path = removeExtensionFromFileName(path);
 
   try {
 
-    TetMesh* mesh(TetMesh::load((path_models + filename).c_str()));
+    TetMesh* mesh(TetMesh::load((path + ".msh").c_str()));
 
     if (invArg.getValue() == false) {
-      inv_curv(mesh, folder, removeExtensionFromFileName(filename));
+      inv_curv(mesh, path);
     } else if (stlArg.getValue() == false) {
-      inv_deform(mesh, folder, removeExtensionFromFileName(filename));
+      inv_deform(mesh, path);
     } else {
       std::cerr << "nothing to do ..." << std::endl;
     }

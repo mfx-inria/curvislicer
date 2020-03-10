@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 #pragma once
 
 #include <vector>
@@ -47,7 +59,7 @@ public:
   vector<uint>  ver_neighbours(uint t);
 
   uint getTetrahedronSurface(uint t);
-  
+
   size_t numTriangles();
   v3u& triangleAt(uint t);
 

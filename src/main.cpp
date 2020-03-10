@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 // --------------------------------------------------------------
 // ------------------    INCLUDES    ----------------------------
 // --------------------------------------------------------------
@@ -1044,11 +1056,8 @@ int main(int argc, char **argv)
             ForArray(displ, i) {
                 tmp.vertexAt(i)[2] = displ[i];
             }
-#ifdef GRB
-            tmp.save((folder + "/afterGRB.stl").c_str(), &tmp);
-#elif OSQP
-            tmp.save((folder + "/afterOSQP.stl").c_str(), &tmp);
-#endif
+
+            tmp.save((folder + "/after.stl").c_str(), &tmp);
             saveArray(displ, (folder + "/displacements").c_str());
 
             ///////////////////////////////////////

@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 //---------------------------------------------------------------------------
 #include "LibSL.precompiled.h"
 //---------------------------------------------------------------------------
@@ -85,7 +97,7 @@ void parseNodes(ifstream& stream, MeshFormat_msh::msh_format_info& format)
 
   int num_i;
   double xyz[3];
-  
+
   if (format.binary) {
     ForIndex(i, nb_nodes) {
 	    stream.read(reinterpret_cast<char*>(&num_i), sizeof(int));
@@ -112,16 +124,16 @@ void parseElements(ifstream& stream, MeshFormat_msh::msh_format_info& format)
   uint nb_elems = 0;
   while (nb_elems < nb_elements)
   {
-    
+
 	  if (format.binary) {
 	    stream.read(reinterpret_cast<char*>(&header), sizeof(header));
     } else {
 	    stream >> header[0];
 	    parseWhiteSpace(stream);
 	  }
-	
+
 	  int elem_size = 0;
-	
+
     switch (header[0]) {
     case 1: // 2-node line
       break;
@@ -131,15 +143,15 @@ void parseElements(ifstream& stream, MeshFormat_msh::msh_format_info& format)
     case 3: // 4-node quadrangle
       elem_size = 4;
 	  break;
-    case 4: // 4-node tetrahedron 
+    case 4: // 4-node tetrahedron
       elem_size = 4;
       break;
     case 5: // 8-node hexahedron
       break;
-    case 6: 
+    case 6:
       break;
     }
-	
+
 	for (int elem = 0; elem < header[1]; elem++) {
       for (int tag = 0; tag < header[2]; tag++) {
         int data;
@@ -151,7 +163,7 @@ void parseElements(ifstream& stream, MeshFormat_msh::msh_format_info& format)
       int data[4];
       stream.read(reinterpret_cast<char*>(&data), sizeof(data));
       vector<int> elems;
-	  
+
 	    ForIndex (i, elem_size) {
 	      elems.emplace_back(data[i]);
 	    }

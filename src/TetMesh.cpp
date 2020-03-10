@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 #include "TetMesh.h"
 
 //---------------------------------------------------------------------------
@@ -30,7 +42,7 @@ TetMesh::TetMesh()
 {
 }
 
-TetMesh::TetMesh(TetMesh* mesh) 
+TetMesh::TetMesh(TetMesh* mesh)
 {
 
   for (auto vertex : mesh->m_vertices) {
@@ -291,7 +303,7 @@ int LUPDecompose(double **A, int N, double Tol, int *P) {
     }
   }
 
-  return 1;  //decomposition done 
+  return 1;  //decomposition done
 }
 
 /* INPUT: A,P filled in LUPDecompose; b - rhs vector; N - dimension

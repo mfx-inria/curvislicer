@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 #include <algorithm>
 #include <LibSL/LibSL.h>
 #include <LibSL/Memory/ArrayTools.h>
@@ -29,7 +41,7 @@ void subdivide(
       //      / \    \
       //     /     \  \
       //  b /---------\\ c
-      //        
+      //
       v3f abh = pts[a] + (pts[b] - pts[a]) / 2.0f;
       subdivide(pts[c], pts[a], abh, minlen, _pts, _tris);
       subdivide(pts[b], pts[c], abh, minlen, _pts, _tris);

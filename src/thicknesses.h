@@ -1,4 +1,3 @@
-
 // ------------------   VARIABLES   ----------------------------
 
 float min_thickness   = 0.1f;    // tau min : minimum thickness (constraint)

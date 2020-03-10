@@ -1,12 +1,14 @@
-// ------------------------------------------------------
-// LibSL::Mesh::MeshFormat_msh
-// ------------------------------------------------------
-//
-// Load/save LibSL 'msh' file format
-//
-// ------------------------------------------------------
-// Jimmy ETIENNE - 2018-10-11
-// ------------------------------------------------------
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
 
 #pragma once
 
@@ -33,7 +35,7 @@ namespace LibSL {
       {
         std::vector<std::string> string_tags;  // [name of the post-processing view, name of the interpolation scheme, ???]
         std::vector<float>       real_tags;    // [time value, ???]
-        std::vector<int>         integer_tags; // [time step index, number of field components (1, 3 or 9), number of entities, partition index, ???] 
+        std::vector<int>         integer_tags; // [time step index, number of field components (1, 3 or 9), number of entities, partition index, ???]
 
         std::map<int, std::vector<float>> values; // entity number : [value1, value2, ...]
 
@@ -44,7 +46,7 @@ namespace LibSL {
       {
         std::vector<std::string> string_tags;  // [name of the post-processing view, name of the interpolation scheme, ???]
         std::vector<float>       real_tags;    // [time value, ???]
-        std::vector<int>         integer_tags; // [time step index, number of field components (1, 3 or 9), number of elements, partition index, ???] 
+        std::vector<int>         integer_tags; // [time step index, number of field components (1, 3 or 9), number of elements, partition index, ???]
 
         std::map<int, std::pair<int, std::vector<float>>> values; // element number : <number of nodes per element ,[value1, value2, ...]>
 
@@ -55,7 +57,7 @@ namespace LibSL {
       {
         float  version_number;
         bool   binary; // 0 = ASCII, 1 = binary
-        
+
         uint   data_size = 0;
         uint   number_of_nodes_per_element;
         uint   element_type;
@@ -75,7 +77,7 @@ namespace LibSL {
       void           save(const char *,const TriangleMesh *) const;
       TriangleMesh  *load(const char *)                      const;
       const char    *signature()                             const {return "msh";}
-    
+
     public:
       mutable std::vector<uint>                        m_meshes;
       mutable std::vector<LibSL::Math::Tuple<uint, 3>> m_surfaces;

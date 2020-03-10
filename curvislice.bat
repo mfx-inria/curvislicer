@@ -1,11 +1,15 @@
 @echo off
 setlocal enabledelayedexpansion
 
+set gurobi=0
+
+
 set volumic=0
 set nozzle=0.4
 set layer=0.3
 set filament=1.75
-set gurobi=0
+set ironing=0
+
 
 
 set arg=none
@@ -21,7 +25,7 @@ goto :EndLoop
     set arg=none
   )
   goto :End
-  
+
 :EndLoop
 if "%arg%" EQU "none" (
   echo Error in arguments
@@ -40,7 +44,20 @@ if "%gurobi%" EQU "1" (
 )
 
 echo Optimize...
-call %optimize% %model% -l %layer%
+echo c all %optimize% %model% -l %layer%
 echo Done!
+
+echo Prepare lua for IceSL
+call luaGenerator.bat %model% %volumic% %nozzle% %layer% %filament% %ironing%
+
+if not exist %appdata%\IceSL\icesl-printers\fff\curvi (
+  echo Create 'curvi' printer profile for IceSL
+  xcopy /S /I /Q .\resources\curvi "%AppData%\IceSL\icesl-printers\fff\curvi"
+)
+
+.\tools\icesl\bin\icesl-slicer.exe settings.lua --service
+
+.\bin\uncurve.exe -l %layer% --gcode %model%
+
 
 :End

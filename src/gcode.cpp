@@ -1,3 +1,15 @@
+/*
+This work and all associated files are under the
+
+     GNU AFFERO GENERAL PUBLIC LICENSE
+        Version 3, 19 November 2007
+
+A copy of the license full text is included in
+the distribution, please refer to it for details.
+
+(c) Jimmy Etienne and Sylvain Lefebvre
+*/
+
 #include "gcode.h"
 
 // --------------------------------------------------------------
@@ -90,7 +102,7 @@ void gcode_reset()
 
 // --------------------------------------------------------------
 
-v3f gcode_offset() 
+v3f gcode_offset()
 {
   return g_GCodeOffset;
 }
@@ -207,7 +219,7 @@ int gcode_line()
 
 // --------------------------------------------------------------
 
-bool gcode_error() 
+bool gcode_error()
 {
   return g_GCodeError;
 }
