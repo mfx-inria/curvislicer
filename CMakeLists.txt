@@ -11,11 +11,6 @@ INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/libs/SolverWrapper/src/
 )
 
-CONFIGURE_FILE(
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/path.h.in"
-        "${CMAKE_CURRENT_SOURCE_DIR}/path.h"
-)
-
 SET(LIBSL_SOURCES
         libs/LibSL-small/src/LibSL/Math/Math.cpp
         libs/LibSL-small/src/LibSL/Math/Vertex.cpp

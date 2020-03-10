@@ -27,7 +27,6 @@ the distribution, please refer to it for details.
 
 #include "Model.h"
 
-#include "path.h"
 #include "gcode.h"
 #include "TetMesh.h"
 #include "MeshFormat_msh.h"
@@ -916,7 +915,7 @@ bool gurobi_opt(
 
 int main(int argc, char **argv)
 {
-    string path_models = SRC_PATH;
+    string path_models = "";
     max_theta = 30.0;
     obj_angle = 0.0;
     compute_time = 6*600; // Default is 60 min
