@@ -27,7 +27,6 @@ the distribution, please refer to it for details.
 
 #include "Model.h"
 
-#include "path.h"
 #include "gcode.h"
 #include "TetMesh.h"
 #include "MeshFormat_msh.h"
@@ -678,6 +677,7 @@ bool gurobi_opt(
         // ==============================================
 
         {
+            MeshFormat_stl::MeshFormat_stl();
             TriangleMesh_Ptr tmp(new TriangleMesh_generic<MeshFormat_stl::t_VertexData>(mesh.numVertices(), mesh.numSurfaces()));
             ForIndex(s, mesh.numSurfaces()) {
                 tmp->triangleAt(s) = mesh.surfaceTriangleAt(s);
@@ -691,7 +691,9 @@ bool gurobi_opt(
                 tmp->posAt(v) = mesh.vertexAt(v);
                 tmp->posAt(v)[2] = scratch->getVarByName(sprint("z_%03d", v)).get() + mesh.vertexAt(min_)[2];
             }
+            
             saveTriangleMesh((folder + sprint("/tmp_after_%02d.stl", cnt++)).c_str(), tmp.raw());
+            
         }
 
         // ==============================================
@@ -916,7 +918,7 @@ bool gurobi_opt(
 
 int main(int argc, char **argv)
 {
-    string path_models = SRC_PATH;
+    string path_models = "";
     max_theta = 30.0;
     obj_angle = 0.0;
     compute_time = 6*600; // Default is 60 min
@@ -985,11 +987,11 @@ int main(int argc, char **argv)
 
     /////////////////////////////
 
-    folder = path_models + removeExtensionFromFileName(filename);
+    folder = removeExtensionFromFileName(filename);
 
     try {
 
-        TetMesh* mesh(TetMesh::load((path_models + filename).c_str()));
+        TetMesh* mesh(TetMesh::load((filename).c_str()));
         cerr << Console::white << "Mesh has " << mesh->numTetrahedrons() << " tets." << Console::gray << std::endl;
 
         if (numLayerArg.isSet()) {
@@ -1056,7 +1058,6 @@ int main(int argc, char **argv)
             ForArray(displ, i) {
                 tmp.vertexAt(i)[2] = displ[i];
             }
-
             tmp.save((folder + "/after.stl").c_str(), &tmp);
             saveArray(displ, (folder + "/displacements").c_str());
 

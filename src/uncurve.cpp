@@ -23,18 +23,17 @@ the distribution, please refer to it for details.
 #include <iterator>
 #include <unordered_map>
 
-using namespace std;
+#include "Model.h"
 
-#include "path.h"
 #include "gcode.h"
 #include "TetMesh.h"
 #include "MeshFormat_msh.h"
 
-#include "Model.h"
+#include "thicknesses.h"
+
 
 // --------------------------------------------------------------
-
-#include "thicknesses.h"
+using namespace std;
 
 const float retract_e_length_mm = 6.0f;
 const float min_speed_mm_sec    = 10.0f;
@@ -750,7 +749,7 @@ void inv_deform(TetMesh* mesh, string path)
 
 int main(int argc, char **argv)
 {
-  string path = SRC_PATH;
+  string path = "";
 
   // command line
   TCLAP::CmdLine cmd("", ' ', "1.0");

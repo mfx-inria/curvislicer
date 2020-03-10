@@ -9,7 +9,7 @@ set nozzle=0.4
 set layer=0.3
 set filament=1.75
 set ironing=0
-
+set model=""
 
 
 set arg=none
@@ -33,18 +33,19 @@ if "%arg%" EQU "none" (
 )
 
 set model=%arg%
+set model=%model:\=/%
 
 echo Generate tetmesh "from %model%.stl" ...
 call toTetmesh.bat %model%
 echo Done!
 
-set optimize="optimize_osqp.bat"
-if "%gurobi%" EQU "1" (
-  set optimize="optimize_grb.bat"
-)
-
 echo Optimize...
-echo c all %optimize% %model% -l %layer%
+
+if "%gurobi%" EQU "1" (
+  .\bin\curvislice_grb.exe ./ %model%.msh -l %layer%
+) else (
+  .\bin\curvislice_osqp.exe ./ %model%.msh -l %layer%
+)
 echo Done!
 
 echo Prepare lua for IceSL
@@ -52,7 +53,7 @@ call luaGenerator.bat %model% %volumic% %nozzle% %layer% %filament% %ironing%
 
 if not exist %appdata%\IceSL\icesl-printers\fff\curvi (
   echo Create 'curvi' printer profile for IceSL
-  xcopy /S /I /Q .\resources\curvi "%AppData%\IceSL\icesl-printers\fff\curvi"
+  xcopy /S /I /Q /Y .\resources\curvi "%AppData%\IceSL\icesl-printers\fff\curvi"
 )
 
 .\tools\icesl\bin\icesl-slicer.exe settings.lua --service
