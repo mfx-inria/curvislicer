@@ -5,7 +5,9 @@
 Install the latest version of IceSL (It's a slicer, with a small added feature to work with curvislice)
 
 Once installed, move the folder "curvi" (in the resources folder) into the folder
+
 *windows:* it should be automatic by running curvislice.bat, otherwise **%appdata%/IceSL/icesl-printers/fff/**
+
 *linux:* **?/icesl-printers/fff/**
 
 ### CMake
