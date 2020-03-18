@@ -33,6 +33,7 @@ By default, only OSQP solver will be used. If you want to use Gurobi instead, yo
 
 On Windows, run:
 curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> [stl_filename]
+
 It will automagically generate your gcode files.
 
 On Linux: you have to run every step by hand for now.
