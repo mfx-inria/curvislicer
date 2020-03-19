@@ -40,16 +40,16 @@ Once installed, copy the folder "curvi" (in the /resources folder) into IceSL pr
 ### Download
 **git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git**
 
-This will download other repositories as:
-	SolverWrapper (wrapper API around Gurobi and OSQP).
-	OSQP
-	LibSL-small
+This will automatically download other repositories:
+	SolverWrapper (wrapper API around Gurobi and OSQP),
+	OSQP,
+	LibSL-small.
 
 ### Build
 
-By default, only OSQP solver will be used. If you want to use Gurobi instead, you'll have to enable the cmake flag "BUILD_WITH_GRB" and choose the "GRB_VERSION".
+Then, you need to build the **INSTALL** project, it will generate the executables and put them in the **bin** folder.
 
-Then, you need to build the **INSTALL** project, it will generate the executables and put them in the **bin** folder
+By default, the OSQP solver version will be built. If you want to use Gurobi instead, you'll have to enable the CMake flag "BUILD_WITH_GRB" and choose the "GRB_VERSION" (and quite obviously you need to have Gurobi installed with a license).
 
 ### Run
 
