@@ -1,24 +1,38 @@
-# How to use it
+# CurviSlicer
+
+CurviSlicer is research projet about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers. 
+Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This avoids leaving porosities inside, and allows to accurately position the top curved surfaces. 
+
+The research was done by Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can find the academic paper here: https://hal.archives-ouvertes.fr/hal-02120033/document
+
+The implementation was done by Jimmy Etienne and Sylvain Lefebvre, with tons of guidance from our colleagues. Please don't expect high quality, production ready code, this is a research prototype. The code depends on many other great projects such as [https://github.com/Yixin-Hu/TetWild](TetWild) and [https://github.com/oxfordcontrol/osqp](OSQP).
+
+## Important note
+
+The original implementation in the paper uses the [https://www.gurobi.com/](Gurobi) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch, please us it for reproducibility of the paper results (speed and quality). The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version. Of course we'll keep improving it!
+
+# How to use
+
+This repository is meant to be built from source, and includes binaries (Windows) of some required external tools. It is primarily developped under Windows with Visual Studio Community 2019. There is not reason this would not work under Linux, but we did not have time yet to make the scripts, external binaires, etc. Contributions are welcome!
+
 ## Prerequisites:
 
+You need to have Visual C++ Studio and CMake installed.
+
 ### IceSL
-Install the latest version of IceSL (It's a slicer, with a small added feature to work with curvislice)
 
-Once installed, move the folder "curvi" (in the resources folder) into the folder
+Install the latest version of [https://icesl.loria.fr/download/](IceSL) (the latest version adds a small feature to work with curvislice).
 
-*windows:* it should be automatic by running curvislice.bat, otherwise **%appdata%/IceSL/icesl-printers/fff/**
+Once installed, copy the folder "curvi" (in the /resources folder) into IceSL printer profiles folder ; on Windows this is **%appdata%/IceSL/icesl-printers/fff/**
 
-*linux:* **?/icesl-printers/fff/**
-
-### CMake
-Download and install the last CMake version.
+(under Linux it should be in **~/.icesl/icesl-printers/fff/**)
 
 ## Download, build and run
 
 ### Download
 **git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git**
 
-It will download other repositories as:
+This will download other repositories as:
 	SolverWrapper (to be able to switch between Gurobi and OSQP).
 	OSQP
 	LibSL-small
@@ -32,15 +46,26 @@ Then, you need to build the **INSTALL** project, it will generate the exectutabl
 
 ### Run
 
-On Windows, run:
+On Windows, from a command line run:
+
 curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> [stl_filename]
 
 It will automagically generate your gcode files.
 
-On Linux: you have to run every step by hand for now. A setting example for IceSL is provided (settings.lua).
+For example, a great starting point is to simply run
+
+curvislice.bat models/wing
+
+The gcode is then found in models/wing.gcode
+
+Linux: you have to run every step by hand for now. A setting example for IceSL is provided (settings.lua).
+
+### Printing
+
+
 
 # Caution, this software can generate inappropriate trajectories for your printer that can damage it.
 
-Results using OSQP can vary from the one using Gurobi (more artifacts, minor respect to surface).
+### License
 
-To have the same **quality and speed** as presented at the **SIGGRAPH 2019 conference**, use the dedicated branch (**Siggraph2019**). This branch can only work with Gurobi optimizer.
+[https://www.gnu.org/licenses/agpl-3.0.en.html](Affero GPL 3.0)
