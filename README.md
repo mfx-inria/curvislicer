@@ -19,17 +19,17 @@ The original implementation in the paper uses the [Gurobi](https://www.gurobi.co
 
 # How to use
 
-This repository is meant to be built from source, and includes binaries (Windows) of some required external tools. It is primarily developed under Windows with Visual Studio Community 2019. There is not reason this would not work under Linux, but we did not have time yet to make the scripts, external binaires, etc. Contributions are welcome!
+This repository is meant to be built from source, and includes binaries (Windows) of some required external tools. It is primarily developed under Windows with Visual Studio C++ 2019. There is not reason this would not work under Linux, but we did not have time yet to make the scripts, external binaires, etc. Contributions are welcome!
 
-We will also provide a binary release package, so check the files there.
+We will also provide a binary release package, so check the available files there.
 
 ## Prerequisites:
 
-You need to have Visual C++ Studio and CMake installed.
+You need to have Visual Studio C++ and CMake latest installed.
 
 ### IceSL
 
-Install the latest version of [IceSL](https://icesl.loria.fr/download/) (the latest version adds a small feature to work with curvislice).
+Install the latest version of [IceSL](https://icesl.loria.fr/download/) (adds a small feature to work with curvislice).
 
 Once installed, copy the folder "curvi" (in the /resources folder) into IceSL printer profiles folder ; on Windows this is **%appdata%/IceSL/icesl-printers/fff/**
 
