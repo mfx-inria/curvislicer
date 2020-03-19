@@ -3,6 +3,8 @@
 CurviSlicer is research project about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers. 
 Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This avoids leaving porosity inside, and allows to accurately position the top curved surfaces. 
 
+The image below compares adaptive slicing with flat layer (top) to the same number of curved layers using CurviSlicer (bottom). The adaptive slicer concentrates the thin slices around the car hood (as it should) but then it has to use thick slices everywhere else. The curved slices nicely follow the car outlines.
+
 ![](https://github.com/mfx-inria/curvislicer/blob/master/resources/car.png "Comparing flat and curved layers.")
 
 The research was done by Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can find the academic paper here: https://hal.archives-ouvertes.fr/hal-02120033/document
