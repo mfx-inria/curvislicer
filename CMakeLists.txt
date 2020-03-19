@@ -1,3 +1,5 @@
+####################################
+
 cmake_minimum_required(VERSION 2.6)
 project(curvislice)
 
@@ -9,7 +11,6 @@ INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/libs/SolverWrapper/include/
         ${PROJECT_SOURCE_DIR}/libs/SolverWrapper/src/
 )
-
 
 ####################################
 
@@ -105,36 +106,6 @@ else(BUILD_WITH_GRB)
 endif(BUILD_WITH_GRB)
 
 ####################################
-
-ADD_EXECUTABLE(reorient
-  src/reorient.cpp
-)
-INSTALL(
-  TARGETS reorient
-  RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-)
-set_target_properties(reorient
-  PROPERTIES
-    CXX_STANDARD 17
-    CXX_EXTENSIONS OFF
-)
-
-target_link_libraries(reorient LibSL)
-
-####################################
-
-ADD_EXECUTABLE(subdiv
-  src/subdiv.cpp
-)
-INSTALL(
-  TARGETS subdiv
-  RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
-)
-
-target_link_libraries(subdiv LibSL)
-
-####################################
-
 
 if(WIN32)
   if (BUILD_WITH_GRB)

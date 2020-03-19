@@ -628,8 +628,6 @@ void inv_curv(TetMesh* mesh, string filepath)
 
   ////////////////////////////////////////////////////////
 
-  LIBSL_TRACE;
-
   std::ofstream out_gcode((filepath + ".gcode").c_str(), ios::out | ios::trunc);
   if (!out_gcode) {
     std::cerr << "Erreur � l'ouverture !" << endl;
@@ -784,22 +782,6 @@ int main(int argc, char **argv)
   deltaP        = deltaArg.getValue();
   do_reflow     = rflwArg .getValue();
   do_sim        = simArg  .getValue();
-
-  /*if (a8) {
-    max_thickness = 0.4f;
-    layer_thickness = max_thickness;
-    min_thickness = max_thickness / 6.0f;
-  } else if (um2) {
-    max_thickness = 0.6f;
-    layer_thickness = max_thickness;
-    min_thickness = max_thickness / 6.0f;
-  } else if (deltaP) {
-    max_thickness   = 0.3f;
-    layer_thickness = max_thickness;
-    min_thickness   = max_thickness / 6.0f;
-  } else {
-    sl_assert(false);
-  }*/
 
   /////////////////////////////
 

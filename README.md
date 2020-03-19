@@ -3,9 +3,12 @@
 CurviSlicer is research project about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers. 
 Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This avoids leaving porosity inside, and allows to accurately position the top curved surfaces. 
 
+![](https://github.com/mfx-inria/curvislicer/blob/master/resources/car.png "Comparing flat and curved layers.")
+
 The research was done by Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can find the academic paper here: https://hal.archives-ouvertes.fr/hal-02120033/document
 
-The implementation was done by Jimmy Etienne and Sylvain Lefebvre, with tons of guidance from our colleagues. Please don't expect high quality, production ready code, this is a research prototype. The code depends on many other great projects such as [https://github.com/Yixin-Hu/TetWild](TetWild) and [https://github.com/oxfordcontrol/osqp](OSQP).
+The implementation was done by Jimmy Etienne and Sylvain Lefebvre, with tons of guidance from our colleagues. Adrien Bedel helped greatly to modify the code to support OSQP.
+Please don't expect high quality, production ready code, this is a research prototype. The code depends on many other great projects such as [https://github.com/Yixin-Hu/TetWild](TetWild) and [https://github.com/oxfordcontrol/osqp](OSQP).
 
 ## Important note
 
@@ -14,6 +17,8 @@ The original implementation in the paper uses the [https://www.gurobi.com/](Guro
 # How to use
 
 This repository is meant to be built from source, and includes binaries (Windows) of some required external tools. It is primarily developed under Windows with Visual Studio Community 2019. There is not reason this would not work under Linux, but we did not have time yet to make the scripts, external binaires, etc. Contributions are welcome!
+
+We will also provide a binary release package, so check the files there.
 
 ## Prerequisites:
 
@@ -33,10 +38,9 @@ Once installed, copy the folder "curvi" (in the /resources folder) into IceSL pr
 **git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git**
 
 This will download other repositories as:
-	SolverWrapper (to be able to switch between Gurobi and OSQP).
+	SolverWrapper (wrapper API around Gurobi and OSQP).
 	OSQP
 	LibSL-small
-
 
 ### Build
 
@@ -62,9 +66,12 @@ Linux: you have to run every step by hand for now. A setting example for IceSL i
 
 ### Printing
 
-The produced gcode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle. In our experience it works best on delta-style printers, as the Z axis is comparably efficient to the X,Y axes.
+The produced gcode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle. In our experience it works best on delta-style printers, as the Z axis is comparably efficient to the X,Y axes. On other types of printers some adaptation of flow is required ; our tool **uncurve** has some command line parameters for this purpose, but these are mostly experimental.
 
-# Caution, this software can generate inappropriate trajectories for your printer that can damage it.
+# Caution, this software can generate inappropriate trajectories resulting in collisions between the printer carriage and the print. This could damage your printer.
+
+*We are expecting a certain clearance around the nozzle, so make sure there is space around -- basically a 45 degree cone going up from the nozzle tip on at least 5 centimeters, but larger parts may require more clearance.*
+
 
 ### License
 
