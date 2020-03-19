@@ -71,11 +71,11 @@ Linux: you have to run every step by hand for now. A setting example for IceSL i
 
 The produced gcode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle. In our experience it works best on delta-style printers, as the Z axis is comparably efficient to the X,Y axes. On other types of printers some adaptation of flow is required ; our tool **uncurve** has some command line parameters for this purpose, but these are mostly experimental.
 
-# Caution, this software can generate inappropriate trajectories resulting in collisions between the printer carriage and the print. This could damage your printer.
+# Caution, this software generates complex curved trajectories that may result in collisions between the printer carriage and the print. This could damage your printer.
 
 *We are expecting a certain clearance around the nozzle, so make sure there is space around -- basically a 45 degree cone going up from the nozzle tip on at least 5 centimeters, but larger parts may require more clearance. The angle to optimize for can be controlled from the command line.*
 
-![](https://github.com/mfx-inria/curvislicer/blob/master/resources/nozzle-clearance.jpg "Typical space require around the nozzle.")
+![](https://github.com/mfx-inria/curvislicer/blob/master/resources/nozzle-clearance.jpg "Typical space required around the nozzle.")
 
 ### License
 
