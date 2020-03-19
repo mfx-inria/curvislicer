@@ -7,7 +7,8 @@ The image below compares adaptive slicing with flat layer (top) to the same numb
 
 ![](https://github.com/mfx-inria/curvislicer/blob/master/resources/car.png "Comparing flat and curved layers.")
 
-The research was done by Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can find the academic paper here: https://hal.archives-ouvertes.fr/hal-02120033/document
+The method was developed by an international team of researchers: Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie C.L. Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can find the academic paper here: https://hal.archives-ouvertes.fr/hal-02120033/document
+The work finds its origin in a brainstorm session during the 2018 Computational Geometry workshop at the Bellairs Research Institute, co-organized by Sue Whitesides and Sylvain Lazard.
 
 The implementation was done by Jimmy Etienne and Sylvain Lefebvre, with tons of guidance from our colleagues. Adrien Bedel helped greatly to modify the code to support OSQP.
 Please don't expect high quality, production ready code, this is a research prototype. The code depends on many other great projects such as [https://github.com/Yixin-Hu/TetWild](TetWild) and [https://github.com/oxfordcontrol/osqp](OSQP).
