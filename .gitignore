@@ -6,4 +6,4 @@ build/
 
 *.gcode
 
-path.h
+settings.lua
