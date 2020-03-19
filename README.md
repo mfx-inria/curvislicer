@@ -16,7 +16,7 @@ Download and install the last CMake version.
 ## Download, build and run
 
 ### Download
-**git clone --recurse-submodules --remote-submodules https://github.com/mfx-inria/curvislicer.git**
+**git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git**
 
 It will download other repositories as:
 	SolverWrapper (to be able to switch between Gurobi and OSQP).
@@ -28,6 +28,7 @@ It will download other repositories as:
 
 By default, only OSQP solver will be used. If you want to use Gurobi instead, you'll have to enable the cmake flag "BUILD_WITH_GRB" and choose the "GRB_VERSION".
 
+Then, you need to build the **INSTALL** project, it will generate the exectutables and put thenm in the **bin** folder
 
 ### Run
 
@@ -36,7 +37,7 @@ curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> 
 
 It will automagically generate your gcode files.
 
-On Linux: you have to run every step by hand for now.
+On Linux: you have to run every step by hand for now. A setting example for IceSL is provided (settings.lua).
 
 # Caution, this software can generate inappropriate trajectories for your printer that can damage it.
 
