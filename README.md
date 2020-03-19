@@ -38,7 +38,8 @@ Once installed, copy the folder "curvi" (in the /resources folder) into IceSL pr
 ## Download, build and run
 
 ### Download
-**git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git**
+
+```git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git```
 
 This will automatically download other repositories:
 	SolverWrapper (wrapper API around Gurobi and OSQP),
@@ -55,13 +56,13 @@ By default, the OSQP solver version will be built. If you want to use Gurobi ins
 
 On Windows, from a command line run:
 
-curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> [stl_filename]
+```curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> [stl_filename]```
 
 It will automagically generate your gcode files.
 
 For example, a great starting point is to simply run
 
-curvislice.bat models/wing.stl
+```curvislice.bat models/wing.stl```
 
 The gcode is then found in models/wing.gcode
 
