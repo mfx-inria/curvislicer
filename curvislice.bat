@@ -34,6 +34,7 @@ if "%arg%" EQU "none" (
 
 set model=%arg%
 set model=%model:\=/%
+for %%f in ("%model%") do set model=%%~dpnf
 
 echo Generate tetmesh "from %model%.stl" ...
 call toTetmesh.bat %model%
