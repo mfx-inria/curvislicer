@@ -10,12 +10,12 @@ The image below compares adaptive slicing with flat layer (top) to the same numb
 The method was developed by an international team of researchers: Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie C.L. Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can find the academic paper here: https://hal.archives-ouvertes.fr/hal-02120033/document
 The work finds its origin in a brainstorm session during the 2018 Computational Geometry workshop at the Bellairs Research Institute, co-organized by Sue Whitesides and Sylvain Lazard.
 
-The implementation was done by Jimmy Etienne and Sylvain Lefebvre, with tons of guidance from our colleagues. Adrien Bedel helped greatly to modify the code to support OSQP.
-Please don't expect high quality, production ready code, this is a research prototype. The code depends on many other great projects such as [https://github.com/Yixin-Hu/TetWild](TetWild) and [https://github.com/oxfordcontrol/osqp](OSQP).
+The implementation was done by Jimmy Etienne and Sylvain Lefebvre, with guidance from colleagues. Adrien Bedel helped greatly to modify the code to support OSQP.
+Please don't expect high quality, production ready code, this is a research prototype. The code depends on many other great projects such as [TetWild](https://github.com/Yixin-Hu/TetWild) and [OSQP](https://github.com/oxfordcontrol/osqp).
 
 ## Important note
 
-The original implementation in the paper uses the [https://www.gurobi.com/](Gurobi) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch, please us it for reproducibility of the paper results (speed and quality). The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version. Of course we'll keep improving it!
+The original implementation in the paper uses the [Gurobi](https://www.gurobi.com/) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch, please us it for reproducibility of the paper results (speed and quality). The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version. Of course we'll keep improving it!
 
 # How to use
 
@@ -29,7 +29,7 @@ You need to have Visual C++ Studio and CMake installed.
 
 ### IceSL
 
-Install the latest version of [https://icesl.loria.fr/download/](IceSL) (the latest version adds a small feature to work with curvislice).
+Install the latest version of [IceSL](https://icesl.loria.fr/download/) (the latest version adds a small feature to work with curvislice).
 
 Once installed, copy the folder "curvi" (in the /resources folder) into IceSL printer profiles folder ; on Windows this is **%appdata%/IceSL/icesl-printers/fff/**
 
@@ -79,4 +79,4 @@ The produced gcode is standard Marlin style for 1.75 mm filament and 0.4 mm nozz
 
 ### License
 
-[https://www.gnu.org/licenses/agpl-3.0.en.html](Affero GPL 3.0)
+[Affero GPL 3.0](https://www.gnu.org/licenses/agpl-3.0.en.html)
