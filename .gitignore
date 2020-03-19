@@ -1,9 +1,12 @@
 bin/
-models/
-scratch/
-results/
 build/
+lib/
 
 *.gcode
+*.msh
+*.csv
+
+models/
+!models/**.stl
 
 settings.lua
