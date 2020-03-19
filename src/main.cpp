@@ -918,15 +918,14 @@ bool gurobi_opt(
 
 int main(int argc, char **argv)
 {
-    string path_models = "";
+    string filepath = "";
     max_theta = 30.0;
     obj_angle = 0.0;
     compute_time = 6*600; // Default is 60 min
 
     // command line
     TCLAP::CmdLine cmd("", ' ', "1.0");
-    TCLAP::UnlabeledValueArg<std::string>  dirArg("d", "dir" , true, "models\\", "directory name");
-    TCLAP::UnlabeledValueArg<std::string> fileArg("f", "file", true, "filename", "file name"     );
+    TCLAP::UnlabeledValueArg<std::string> pathArg("f", "filepath", true, "filepath", "file path"     );
 
     TCLAP::ValueArg<float>       tauArg("t", "tau"             , "layer thickness (mm)"            , false,                    0.0f, "float");
     TCLAP::ValueArg<float>     thetaArg("" , "theta"           , "Maximum printing angle (degrees)", false,                   30.0f, "float");
@@ -943,8 +942,7 @@ int main(int argc, char **argv)
 
 
     // file and folder
-    cmd.add(dirArg);
-    cmd.add(fileArg);
+    cmd.add(pathArg);
 
     // angles and thresholds
     cmd.add(tauArg);
@@ -966,8 +964,7 @@ int main(int argc, char **argv)
     // Parsing
     cmd.parse(argc, argv);
 
-    path_models          = dirArg.getValue();
-    filename             = fileArg.getValue();
+    filepath             = pathArg.getValue();
 
     if ( thetaArg.isSet()) max_theta = thetaArg.getValue();
 
@@ -987,11 +984,12 @@ int main(int argc, char **argv)
 
     /////////////////////////////
 
-    folder = removeExtensionFromFileName(filename);
+    folder = removeExtensionFromFileName(filepath);
+    filename = removeExtensionFromFileName(extractFileName(filepath));
 
     try {
 
-        TetMesh* mesh(TetMesh::load((filename).c_str()));
+        TetMesh* mesh(TetMesh::load((folder + ".msh").c_str()));
         cerr << Console::white << "Mesh has " << mesh->numTetrahedrons() << " tets." << Console::gray << std::endl;
 
         if (numLayerArg.isSet()) {

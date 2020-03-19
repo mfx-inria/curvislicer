@@ -9,7 +9,7 @@ set nozzle=0.4
 set layer=0.3
 set filament=1.75
 set ironing=0
-set model=""
+set model=
 
 
 set arg=none
@@ -32,9 +32,11 @@ if "%arg%" EQU "none" (
   exit
 )
 
-set model=%arg%
+set path=%arg%
+for %%f in ("%path%") do set model=%%~dpnf
 set model=%model:\=/%
-for %%f in ("%model%") do set model=%%~dpnf
+
+echo %model%
 
 echo Generate tetmesh "from %model%.stl" ...
 call toTetmesh.bat %model%
@@ -43,9 +45,9 @@ echo Done!
 echo Optimize...
 
 if "%gurobi%" EQU "1" (
-  .\bin\curvislice_grb.exe ./ %model%.msh -l %layer%
+  .\bin\curvislice_grb.exe %model%.msh -l %layer%
 ) else (
-  .\bin\curvislice_osqp.exe ./ %model%.msh -l %layer%
+  .\bin\curvislice_osqp.exe %model%.msh -l %layer%
 )
 echo Done!
 
