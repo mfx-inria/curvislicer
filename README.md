@@ -73,8 +73,9 @@ The produced gcode is standard Marlin style for 1.75 mm filament and 0.4 mm nozz
 
 # Caution, this software can generate inappropriate trajectories resulting in collisions between the printer carriage and the print. This could damage your printer.
 
-*We are expecting a certain clearance around the nozzle, so make sure there is space around -- basically a 45 degree cone going up from the nozzle tip on at least 5 centimeters, but larger parts may require more clearance.*
+*We are expecting a certain clearance around the nozzle, so make sure there is space around -- basically a 45 degree cone going up from the nozzle tip on at least 5 centimeters, but larger parts may require more clearance. The angle to optimize for can be controlled from the command line.*
 
+![](https://github.com/mfx-inria/curvislicer/blob/master/resources/nozzle-clearance.jpg "Typical space require around the nozzle.")
 
 ### License
 
