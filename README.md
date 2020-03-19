@@ -1,7 +1,7 @@
 # CurviSlicer
 
-CurviSlicer is research projet about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers. 
-Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This avoids leaving porosities inside, and allows to accurately position the top curved surfaces. 
+CurviSlicer is research project about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers. 
+Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This avoids leaving porosity inside, and allows to accurately position the top curved surfaces. 
 
 The research was done by Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can find the academic paper here: https://hal.archives-ouvertes.fr/hal-02120033/document
 
@@ -13,7 +13,7 @@ The original implementation in the paper uses the [https://www.gurobi.com/](Guro
 
 # How to use
 
-This repository is meant to be built from source, and includes binaries (Windows) of some required external tools. It is primarily developped under Windows with Visual Studio Community 2019. There is not reason this would not work under Linux, but we did not have time yet to make the scripts, external binaires, etc. Contributions are welcome!
+This repository is meant to be built from source, and includes binaries (Windows) of some required external tools. It is primarily developed under Windows with Visual Studio Community 2019. There is not reason this would not work under Linux, but we did not have time yet to make the scripts, external binaires, etc. Contributions are welcome!
 
 ## Prerequisites:
 
@@ -42,7 +42,7 @@ This will download other repositories as:
 
 By default, only OSQP solver will be used. If you want to use Gurobi instead, you'll have to enable the cmake flag "BUILD_WITH_GRB" and choose the "GRB_VERSION".
 
-Then, you need to build the **INSTALL** project, it will generate the exectutables and put thenm in the **bin** folder
+Then, you need to build the **INSTALL** project, it will generate the executables and put them in the **bin** folder
 
 ### Run
 
