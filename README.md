@@ -3,7 +3,7 @@
 CurviSlicer is research project about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers. 
 Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This avoids leaving porosity inside, and allows to accurately position the top curved surfaces. 
 
-The image below compares adaptive slicing with flat layers (top) to the same number of curved layers using CurviSlicer (bottom). The adaptive slicer concentrates the thin slices around the car hood (as it should) but then it has to use thick slices everywhere else. Instead, CurviSlicer outputs curved slices that nicely follow the car outlines.
+The image below compares adaptive slicing with flat layers (top) to the same number of layers using CurviSlicer (bottom). The adaptive slicer concentrates the thin slices around the car hood (as it should) but then it has to use thick slices everywhere else. Instead, CurviSlicer outputs curved slices that nicely follow the car outlines. These are roughly the same print time.
 
 ![](https://github.com/mfx-inria/curvislicer/blob/master/resources/car.png "Comparing flat and curved layers.")
 
@@ -15,7 +15,7 @@ Please don't expect high quality, production ready code, this is a research prot
 
 ## Important note
 
-The original implementation in the paper uses the [Gurobi](https://www.gurobi.com/) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch, please us it for reproducibility of the paper results (speed and quality). The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version. Of course we'll keep improving it!
+The original implementation in the paper uses the [Gurobi](https://www.gurobi.com/) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch. **Please use it for reproducibility of the paper results (speed and quality)**. The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version. We'll keep improving it!
 
 # How to use
 
