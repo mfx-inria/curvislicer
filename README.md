@@ -54,7 +54,7 @@ It will automagically generate your gcode files.
 
 For example, a great starting point is to simply run
 
-curvislice.bat models/wing
+curvislice.bat models/wing.stl
 
 The gcode is then found in models/wing.gcode
 
@@ -62,7 +62,7 @@ Linux: you have to run every step by hand for now. A setting example for IceSL i
 
 ### Printing
 
-
+The produced gcode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle. In our experience it works best on delta-style printers, as the Z axis is comparably efficient to the X,Y axes.
 
 # Caution, this software can generate inappropriate trajectories for your printer that can damage it.
 
