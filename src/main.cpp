@@ -677,23 +677,23 @@ bool gurobi_opt(
         // ==============================================
 
         {
-            MeshFormat_stl::MeshFormat_stl();
-            TriangleMesh_Ptr tmp(new TriangleMesh_generic<MeshFormat_stl::t_VertexData>(mesh.numVertices(), mesh.numSurfaces()));
-            ForIndex(s, mesh.numSurfaces()) {
-                tmp->triangleAt(s) = mesh.surfaceTriangleAt(s);
-                if (surfaces_to_flatten.find(s) != surfaces_to_flatten.end()) {
-                    v3u tri = tmp->triangleAt(s);
-                    std::swap(tri[0], tri[1]);
-                    tmp->triangleAt(s) = tri;
-                }
+          MeshFormat_stl stl; // ensures the STL format is registered
+
+          TriangleMesh_Ptr tmp(new TriangleMesh_generic<MeshFormat_stl::t_VertexData>(mesh.numVertices(), mesh.numSurfaces()));
+          ForIndex(s, mesh.numSurfaces()) {
+            tmp->triangleAt(s) = mesh.surfaceTriangleAt(s);
+            if (surfaces_to_flatten.find(s) != surfaces_to_flatten.end()) {
+              v3u tri = tmp->triangleAt(s);
+              std::swap(tri[0], tri[1]);
+              tmp->triangleAt(s) = tri;
             }
-            ForIndex(v, mesh.numVertices()) {
-                tmp->posAt(v) = mesh.vertexAt(v);
-                tmp->posAt(v)[2] = scratch->getVarByName(sprint("z_%03d", v)).get() + mesh.vertexAt(min_)[2];
-            }
-            
-            saveTriangleMesh((folder + sprint("/tmp_after_%02d.stl", cnt++)).c_str(), tmp.raw());
-            
+          }
+          ForIndex(v, mesh.numVertices()) {
+            tmp->posAt(v) = mesh.vertexAt(v);
+            tmp->posAt(v)[2] = scratch->getVarByName(sprint("z_%03d", v)).get() + mesh.vertexAt(min_)[2];
+          }
+
+          saveTriangleMesh((folder + sprint("/tmp_after_%02d.stl", cnt++)).c_str(), tmp.raw());
         }
 
         // ==============================================

@@ -17,9 +17,9 @@ Please don't expect high quality, production ready code, this is a research prot
 
 The original implementation in the paper uses the [Gurobi](https://www.gurobi.com/) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch. **Please use it for reproducibility of the paper results (speed and quality)**. The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version. We'll keep improving it!
 
-# How to use
+# How to use (Windows)
 
-This repository is meant to be built from source, and includes binaries (Windows) of some required external tools. It is primarily developed under Windows with Visual Studio C++ 2019. There is not reason this would not work under Linux, but we did not have time yet to make the scripts, external binaires, etc. Contributions are welcome!
+This repository is meant to be built from source, and includes Windows binaries of some required external tools. Sources are meant to be compiled with Visual Studio C++ 2019. 
 
 We will also provide a binary release package, so check the available files there.
 
@@ -33,11 +33,7 @@ Install the latest version of [IceSL](https://icesl.loria.fr/download/) (adds a 
 
 Once installed, copy the folder "curvi" (in the /resources folder) into IceSL printer profiles folder ; on Windows this is **%appdata%/IceSL/icesl-printers/fff/**
 
-(under Linux it should be in **~/.icesl/icesl-printers/fff/**)
-
-## Download, build and run
-
-### Download
+## Download
 
 ```git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git```
 
@@ -46,15 +42,15 @@ This will automatically download other repositories:
 	OSQP,
 	LibSL-small.
 
-### Build
+## Build
 
 Then, you need to build the **INSTALL** project, it will generate the executables and put them in the **bin** folder.
 
 By default, the OSQP solver version will be built. If you want to use Gurobi instead, you'll have to enable the CMake flag "BUILD_WITH_GRB" and choose the "GRB_VERSION" (and quite obviously you need to have Gurobi installed with a license).
 
-### Run
+## Run
 
-On Windows, from a command line run:
+From a Windows command line run:
 
 ```curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> [stl_filename]```
 
@@ -66,9 +62,14 @@ For example, a great starting point is to simply run
 
 The gcode is then found in models/wing.gcode
 
-Linux: you have to run every step by hand for now. A setting example for IceSL is provided (settings.lua).
+# How to use (Linux)
 
-### Printing
+There is not reason this would not work under Linux, but we did not have time yet to make the scripts and the build system for all dependencies. Contributions are welcome!
+
+You can follow the Windows procedure, but will have to manually compile dependencies (TetWild) and create shell scripts from the Windows batch files.
+
+
+# Printing
 
 The produced gcode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle. In our experience it works best on delta-style printers, as the Z axis is comparably efficient to the X,Y axes. On other types of printers some adaptation of flow is required ; our tool **uncurve** has some command line parameters for this purpose, but these are mostly experimental.
 
