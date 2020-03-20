@@ -93,18 +93,27 @@ We encourage you to play with ironing and the type of top covers (curved covers 
 
 CurviSlicer was developed using IceSL, however it can easily be used with different slicers.
 The optimizer generates a model that has to be sliced 'flat'. The model is called *after.stl*
-and can be found in the sub-directory having the name of your model and created during slicing.
+and can be found in the sub-directory having the name of your model and created during processing.
 
-However the slicer has to output a special GCode format, see *printer.lua* in the *curvi* printer profile directory (in /resources). Our tool *uncurve* also need to know how the 3D mesh spatially relates to the trajectories produced by the slicer, as well as the layer thickness.
+However the slicer has to output a special GCode format, see *printer.lua* in the *curvi* printer profile directory (in /resources). Our tool *uncurve* also needs to know how the 3D mesh spatially relates to the trajectories produced by the slicer, as well as the layer thickness.
 This requires two special lines at the top, here is an example:
-```
-o X-10.3 Y-5.7 Z0.0
-t 0.2
-```
+```o X-10.3 Y-5.7 Z0.0
+t 0.2```
 Here, it means that given a trajectory point, we have to add the offset (-10.3,-5.7,0) to
 locate this same point in the input 3D model space. The line starting with *t* gives the slicing layer height.
 
 You are welcome to use CurviSlicer within the scope of the license (see below). Please cite our paper in your publications and the credits of your software!
+
+```@article{curvislicer,
+author = {Etienne, Jimmy and Ray, Nicolas and Panozzo, Daniele and Hornus, Samuel and Wang, Charlie C. L. and Mart\'{\i}nez, Jon\`{a}s and McMains, Sara and Alexa, Marc and Wyvill, Brian and Lefebvre, Sylvain},
+title = {CurviSlicer: Slightly Curved Slicing for 3-Axis Printers},
+year = {2019},
+volume = {38},
+number = {4},
+journal = {ACM Transactions on Graphics},
+articleno = {Article 81},
+numpages = {11},
+}```
 
 ### License
 
