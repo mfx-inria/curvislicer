@@ -976,7 +976,7 @@ int main(int argc, char **argv)
 
     normal_threshold = thresholdArg.isSet()
                        ? thresholdArg.getValue()
-                       : cos(max_theta * M_PI / 180);
+                       : sin(max_theta * M_PI / 180);
     fabricable_emptiness = fabemptyArg.getValue();
 
     if (  timeArg.isSet()) compute_time = (float)timeArg.getValue();
