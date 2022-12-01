@@ -55,15 +55,19 @@ call luaGenerator.bat %model% %volumic% %nozzle% %layer% %filament% %ironing%
 
 if not exist %appdata%\IceSL\icesl-printers\fff\curvi (
   echo Create 'curvi' printer profile for IceSL
-  xcopy /S /I /Q /Y .\resources\curvi "%AppData%\IceSL\icesl-printers\fff\curvi"
+  mkdir "%AppData%\IceSL\icesl-printers\fff\curvi"
+  copy /Y resources\curvi\features.lua "%AppData%\IceSL\icesl-printers\fff\curvi\"
+  copy /Y resources\curvi\printer.lua "%AppData%\IceSL\icesl-printers\fff\curvi\"
 )
 
 .\tools\icesl\bin\icesl-slicer.exe settings.lua --service
 
 .\bin\uncurve.exe -l %layer% --gcode %model%
 
-cls
-
+echo "
+echo "
+echo "
+echo "
 echo "  ______                                  __            __  __                     
 echo " /      \                                /  |          /  |/  |                    
 echo "/$$$$$$  | __    __   ______   __     __ $$/   _______ $$ |$$/   _______   ______  
