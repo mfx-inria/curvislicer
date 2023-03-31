@@ -1,7 +1,7 @@
 # CurviSlicer
 
-CurviSlicer is research project about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers. 
-Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This reduces internal porosity and fragilities, and allows to accurately position the top curved surfaces. 
+CurviSlicer is research project about achieving curved printing on standard, off-the-shelf, 3-axis FDM printers.
+Our goal is to improve surface quality and accuracy by curving the layers not only at the top, but also throughout the part. This reduces internal porosity and fragilities, and allows to accurately position the top curved surfaces.
 
 The image below compares adaptive slicing with flat layers (top) to the same number of layers using CurviSlicer (bottom). The adaptive slicer concentrates the thin slices around the car hood (as it should) but then it has to use thick slices everywhere else. Instead, CurviSlicer outputs curved slices that nicely follow the car outlines. These are roughly the same print time.
 
@@ -19,58 +19,64 @@ The original implementation in the paper uses the [Gurobi](https://www.gurobi.co
 
 # How to use (Windows)
 
-This repository is meant to be built from source, and includes Windows binaries of some required external tools. Sources are meant to be compiled with Visual Studio C++ 2019. 
+This repository is meant to be built from source, and includes Windows binaries of some required external tools. Sources are meant to be compiled with Visual Studio C++ 2019.
 
 We will also provide a binary release package, so check the available files there.
 
-## Prerequisites:
-
-You need to have Visual Studio C++ and CMake latest installed.
-
-### IceSL
+## 1- IceSL
 
 Install the latest version of [IceSL](https://icesl.loria.fr/download/) (adds a small feature to work with curvislice).
 
-Once installed, copy the folder "curvi" (in the /resources folder) into IceSL printer profiles folder ; on Windows this is **%appdata%/IceSL/icesl-printers/fff/**
+## 2- MinGW
 
-## Download
+Install [MSYS2](https://www.msys2.org/), please make sure to follow all installation steps including the update instructions.
+
+Open a MinGW64 shell (be sure to select *64* not *32*).
+
+## 3- Get this repository locally
+
+From the shell:
 
 ```git clone --recurse-submodules https://github.com/mfx-inria/curvislicer.git```
 
 This will automatically download other repositories:
 	SolverWrapper (wrapper API around Gurobi and OSQP),
-	OSQP,
-	LibSL-small.
+	OSQP, LibSL-small.
 
-## Build
+## 4- Install the special printer profile
 
-Then, you need to build the **INSTALL** project, it will generate the executables and put them in the **bin** folder.
+Copy the folder [curvi](resources/curvi) (in the /resources folder) into the IceSL printer profiles folder ; on Windows this is **%appdata%/IceSL/icesl-printers/fff/**
 
-By default, the OSQP solver version will be built. If you want to use Gurobi instead, you'll have to enable the CMake flag "BUILD_WITH_GRB" and choose the "GRB_VERSION" (and quite obviously you need to have Gurobi installed with a license).
+## 5- Build
 
-## Run
+From the MinGW64 shell, enter
+`./get_started_mingw64.sh`
 
-From a Windows command line run:
+> By default, the OSQP solver version will be built. If you want to use Gurobi instead, you'll have to enable the CMake flag "BUILD_WITH_GRB" and choose the "GRB_VERSION" (and quite obviously you need to have Gurobi installed with a license).
 
-```curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> [stl_filename]```
+## 6- Run
 
-It will automagically generate your gcode files.
+From the MinGW64 shell run (parameters are optional):
+
+```./curvislice.bat <volumic=0> <nozzle=0.4> <layer=0.3> <filament=1.75> <ironing=0> [stl_filename]```
+
+It will automagically generate a G-code file.
 
 For example, a great starting point is to simply run
 
-```curvislice.bat models/wing.stl```
+```./curvislice.bat models/wing.stl```
 
-The gcode is then found in models/wing.gcode
+The GCode is then found in models/wing.gcode
 
 # How to use (Linux)
 
-There is not reason this would not work under Linux, but we did not have time yet to make the scripts and the build system for all dependencies. Contributions are welcome!
+There is not reason this would not work under Linux, but we did not have time to make the scripts and the build system for all dependencies. Contributions are welcome!
 
 You can follow the Windows procedure, but will have to manually compile dependencies (TetWild) and create shell scripts from the Windows batch files.
 
 # Printing
 
-The produced GCode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle. 
+The produced GCode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle.
 Note that it has **no header and no footer**. These you will have to add manually to fit your printer. Also please make sur the produced GCode properly fits your bed as we use an 'average' print bed configuration.
 
 In our experience the GCode prints best on delta-style printers, as the Z axis is comparably efficient to the X,Y axes. On other types of printers some adaptation of flow is required ; our tool **uncurve** has some command line parameters for this purpose, but these are mostly experimental.
@@ -84,7 +90,7 @@ In our experience the GCode prints best on delta-style printers, as the Z axis i
 # Slicing parameters
 
 We slice with IceSL using default parameters that may not be best for your models.
-You can change these parameters by opening IceSL, selecting the *curvi* printer, 
+You can change these parameters by opening IceSL, selecting the *curvi* printer,
 changing parameters and slicing any object (slicing will save the settings for next time).
 
 We encourage you to play with ironing and the type of top covers (curved covers or zigzag covers).

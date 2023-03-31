@@ -1,6 +1,6 @@
 [submodule "libs/LibSL-small"]
 	path = libs/LibSL-small
-	url = https://github.com/JuDePom/LibSL-small.git
+	url = https://github.com/sylefeb/LibSL-small.git
 	branch = CurviSlice
 [submodule "libs/SolverWrapper"]
 	path = libs/SolverWrapper

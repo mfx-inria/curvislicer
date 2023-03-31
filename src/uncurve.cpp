@@ -302,8 +302,6 @@ void reflow(std::vector<t_step>& _steps)
     }
   }
 
-  LIBSL_TRACE;
-
   // constraints
 #if 1
   SLRVar<double> e_i_m_1;

@@ -1,3 +1,4 @@
+#!/bin/bash
 gurobi=0
 
 volumic=0
@@ -20,7 +21,7 @@ do
     arg="none"
   fi
 done
-  
+
 if [ $arg = "none" ]
 then
   echo Error in arguments

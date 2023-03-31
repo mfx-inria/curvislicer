@@ -10,7 +10,23 @@ INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/libs/tclap/include/
         ${PROJECT_SOURCE_DIR}/libs/SolverWrapper/include/
         ${PROJECT_SOURCE_DIR}/libs/SolverWrapper/src/
+        ${PROJECT_SOURCE_DIR}/libs/LibSL-small/src/
+        ${PROJECT_SOURCE_DIR}/libs/LibSL-small/src/LibSL/
 )
+
+SET(LibSL_small
+  libs/LibSL-small/src/LibSL/System/System.cpp
+  libs/LibSL-small/src/LibSL/CppHelpers/CppHelpers.cpp
+  libs/LibSL-small/src/LibSL/StlHelpers/StlHelpers.cpp
+  libs/LibSL-small/src/LibSL/Image/Image.cpp
+  libs/LibSL-small/src/LibSL/Math/Vertex.cpp
+  libs/LibSL-small/src/LibSL/Math/Math.cpp
+  libs/LibSL-small/src/LibSL/Mesh/Mesh.cpp
+  libs/LibSL-small/src/LibSL/Mesh/MeshFormat_stl.cpp
+  libs/LibSL-small/src/LibSL/Mesh/VertexFormat_dynamic.cpp
+)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 
 ####################################
 
@@ -24,12 +40,14 @@ ADD_EXECUTABLE(curvislice_osqp
         src/thicknesses.h
         src/MeshFormat_msh.h
         src/MeshFormat_msh.cpp
+        ${LibSL_small}
         )
 
 INSTALL(
   TARGETS curvislice_osqp
   RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
 )
+INSTALL(FILES libs/SolverWrapper/bin/libosqp.dll DESTINATION ${CMAKE_SOURCE_DIR}/bin)
 
 set_target_properties(curvislice_osqp
   PROPERTIES
@@ -37,7 +55,7 @@ set_target_properties(curvislice_osqp
     CXX_EXTENSIONS OFF
 )
 
-target_link_libraries(curvislice_osqp SolverWrapper LibSL)
+target_link_libraries(curvislice_osqp SolverWrapper)
 
 target_compile_options(curvislice_osqp PRIVATE -DOSQP)
 
@@ -67,7 +85,7 @@ if (BUILD_WITH_GRB)
       CXX_EXTENSIONS OFF
   )
 
-  target_link_libraries(curvislice_grb SolverWrapper LibSL)
+  target_link_libraries(curvislice_grb SolverWrapper)
 
   target_compile_options(curvislice_grb PRIVATE -DGRB)
   target_compile_definitions(curvislice_grb PUBLIC "-DHAS_GUROBI")
@@ -84,6 +102,7 @@ ADD_EXECUTABLE(uncurve
   src/thicknesses.h
   src/MeshFormat_msh.h
   src/MeshFormat_msh.cpp
+  ${LibSL_small}
 )
 
 INSTALL(
@@ -97,7 +116,7 @@ set_target_properties(uncurve
     CXX_EXTENSIONS OFF
 )
 
-target_link_libraries(uncurve SolverWrapper LibSL)
+target_link_libraries(uncurve SolverWrapper)
 
 if(BUILD_WITH_GRB)
   target_compile_options(uncurve PRIVATE -DGRB)

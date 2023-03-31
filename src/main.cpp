@@ -18,6 +18,8 @@ the distribution, please refer to it for details.
 
 #include <LibSL/LibSL.h>
 #include <LibSL/Memory/ArrayTools.h>
+#include <LibSL/DataStructures/Graph.h>
+#include <LibSL/DataStructures/GraphAlgorithms.h>
 
 #include <iostream>
 #include <queue>

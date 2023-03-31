@@ -1,7 +1,6 @@
-@echo off
+REM @echo off
 
 set gurobi=0
-
 
 set volumic=0
 set nozzle=0.4
@@ -9,7 +8,6 @@ set layer=0.3
 set filament=1.75
 set ironing=0
 set model=
-
 
 set arg=none
 
@@ -55,32 +53,35 @@ call luaGenerator.bat %model% %volumic% %nozzle% %layer% %filament% %ironing%
 
 if not exist %appdata%\IceSL\icesl-printers\fff\curvi (
   echo Create 'curvi' printer profile for IceSL
-  mkdir "%AppData%\IceSL\icesl-printers\fff\curvi"
-  copy /Y resources\curvi\features.lua "%AppData%\IceSL\icesl-printers\fff\curvi\"
-  copy /Y resources\curvi\printer.lua "%AppData%\IceSL\icesl-printers\fff\curvi\"
+  mkdir "%appdata%\IceSL\icesl-printers\fff\curvi"
+  copy /Y resources\curvi\features.lua "%appdata%\IceSL\icesl-printers\fff\curvi\"
+  copy /Y resources\curvi\printer.lua "%appdata%\IceSL\icesl-printers\fff\curvi\"
 )
 
+set ODIR=%CD%
 .\tools\icesl\bin\icesl-slicer.exe settings.lua --service
+chdir /d %ODIR%
 
+echo Uncurve %model%
 .\bin\uncurve.exe -l %layer% --gcode %model%
 
 echo "
 echo "
 echo "
 echo "
-echo "  ______                                  __            __  __                     
-echo " /      \                                /  |          /  |/  |                    
-echo "/$$$$$$  | __    __   ______   __     __ $$/   _______ $$ |$$/   _______   ______  
-echo "$$ |  $$/ /  |  /  | /      \ /  \   /  |/  | /       |$$ |/  | /       | /      \ 
+echo "  ______                                  __            __  __
+echo " /      \                                /  |          /  |/  |
+echo "/$$$$$$  | __    __   ______   __     __ $$/   _______ $$ |$$/   _______   ______
+echo "$$ |  $$/ /  |  /  | /      \ /  \   /  |/  | /       |$$ |/  | /       | /      \
 echo "$$ |      $$ |  $$ |/$$$$$$  |$$  \ /$$/ $$ |/$$$$$$$/ $$ |$$ |/$$$$$$$/ /$$$$$$  |
 echo "$$ |   __ $$ |  $$ |$$ |  $$/  $$  /$$/  $$ |$$      \ $$ |$$ |$$ |      $$    $$ |
-echo "$$ \__/  |$$ \__$$ |$$ |        $$ $$/   $$ | $$$$$$  |$$ |$$ |$$ \_____ $$$$$$$$/ 
+echo "$$ \__/  |$$ \__$$ |$$ |        $$ $$/   $$ | $$$$$$  |$$ |$$ |$$ \_____ $$$$$$$$/
 echo "$$    $$/ $$    $$/ $$ |         $$$/    $$ |/     $$/ $$ |$$ |$$       |$$       |
-echo " $$$$$$/   $$$$$$/  $$/           $/     $$/ $$$$$$$/  $$/ $$/  $$$$$$$/  $$$$$$$/ 
+echo " $$$$$$/   $$$$$$/  $$/           $/     $$/ $$$$$$$/  $$/ $$/  $$$$$$$/  $$$$$$$/
 
 echo "===================================================================================
 echo "==>
-echo "     Gcode generated at: %model%.gcode      
+echo "     Gcode generated at: %model%.gcode
 echo "==>
 echo "===================================================================================
 
