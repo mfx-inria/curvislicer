@@ -5,7 +5,7 @@ Our goal is to improve surface quality and accuracy by curving the layers not on
 
 The image below compares adaptive slicing with flat layers (top) to the same number of layers using CurviSlicer (bottom). The adaptive slicer concentrates the thin slices around the car hood (as it should) but then it has to use thick slices everywhere else. Instead, CurviSlicer outputs curved slices that nicely follow the car outlines. These are roughly the same print time.
 
-![](https://github.com/mfx-inria/curvislicer/blob/master/resources/car.png "Comparing flat and curved layers.")
+![](resources/car.png "Comparing flat and curved layers.")
 
 The method was developed by an international team of researchers: Jimmy Etienne, Nicolas Ray, Daniele Panozzo, Samuel Hornus, Charlie C.L. Wang, Jonàs Martínez, Sara Mcmains, Marc Alexa, Brian Wyvill and Sylvain Lefebvre ; you can [find the academic paper here](https://hal.archives-ouvertes.fr/hal-02120033/document).
 The work finds its origin in a brainstorm session during the 2018 Computational Geometry workshop at the Bellairs Research Institute, co-organized by Sue Whitesides and Sylvain Lazard.
@@ -13,19 +13,19 @@ The work finds its origin in a brainstorm session during the 2018 Computational 
 The implementation was done by Jimmy Etienne and Sylvain Lefebvre, with guidance from colleagues. Adrien Bedel helped greatly to modify the code to support OSQP.
 Please don't expect high quality, production ready code, this is a research prototype. The code depends on many other great projects such as [TetWild](https://github.com/Yixin-Hu/TetWild) and [OSQP](https://github.com/oxfordcontrol/osqp).
 
-## Important note
+## Important notes
 
-The original implementation in the paper uses the [Gurobi](https://www.gurobi.com/) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch. **Please use it for reproducibility of the paper results (speed and quality)**. The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version. We'll keep improving it!
+> **1.** The original implementation in the paper uses the [Gurobi](https://www.gurobi.com/) commercial solver. This initial implementation is in the SIGGRAPH 2019 branch. **Please use it for reproducibility of the paper results (speed and quality)**. The master branch is modified to use OSQP and while it works great, there are differences and limitations compared to the Gurobi version.
+
+> **2.** This is a research prototype. It is not polished, and has several technical limitations and glitches.
 
 # How to use (Windows)
 
-This repository is meant to be built from source, and includes Windows binaries of some required external tools. Sources are meant to be compiled with Visual Studio C++ 2019.
-
-We will also provide a binary release package, so check the available files there.
+This repository is meant to be built from source, and includes Windows binaries of some required external tools. The following described the build process using MinGW/MSYS2 for Windows.
 
 ## 1- IceSL
 
-Install the latest version of [IceSL](https://icesl.loria.fr/download/) (adds a small feature to work with curvislice).
+Install the latest version of [IceSL](https://icesl.loria.fr/download/).
 
 ## 2- MinGW
 
@@ -66,7 +66,9 @@ For example, a great starting point is to simply run
 
 ```./curvislice.bat models/wing.stl```
 
-The GCode is then found in models/wing.gcode
+The GCode is then found in `models/wing.gcode`
+
+> To try with your own model, place it in `models` and run the same command line.
 
 # How to use (Linux)
 
@@ -76,12 +78,12 @@ You can follow the Windows procedure, but will have to manually compile dependen
 
 # Printing
 
+> **Caution, this software generates complex curved trajectories that may result in collisions between the printer carriage and the print. This could damage your printer.**
+
 The produced GCode is standard Marlin style for 1.75 mm filament and 0.4 mm nozzle.
 Note that it has **no header and no footer**. These you will have to add manually to fit your printer. Also please make sur the produced GCode properly fits your bed as we use an 'average' print bed configuration.
 
 In our experience the GCode prints best on delta-style printers, as the Z axis is comparably efficient to the X,Y axes. On other types of printers some adaptation of flow is required ; our tool **uncurve** has some command line parameters for this purpose, but these are mostly experimental.
-
-# Caution, this software generates complex curved trajectories that may result in collisions between the printer carriage and the print. This could damage your printer.
 
 *We are expecting a certain clearance around the nozzle, so make sure there is space around -- basically a 45 degree cone going up from the nozzle tip on at least 5 centimeters, but larger parts may require more clearance. The angle to optimize for can be controlled from the command line.*
 
