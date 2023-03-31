@@ -47,7 +47,8 @@ INSTALL(
   TARGETS curvislice_osqp
   RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/bin
 )
-INSTALL(FILES libs/SolverWrapper/bin/libosqp.dll DESTINATION ${CMAKE_SOURCE_DIR}/bin)
+
+INSTALL(FILES ${CMAKE_BINARY_DIR}/libs/SolverWrapper/lib/osqp/out/libosqp.dll DESTINATION ${CMAKE_SOURCE_DIR}/bin)
 
 set_target_properties(curvislice_osqp
   PROPERTIES
