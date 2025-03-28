@@ -90,6 +90,7 @@ float compute_time = 0.0f; // time for a compute iteration (0 = no limit)
 int     nb_threads = 4;
 
 bool  fabricable_emptiness = false;
+bool  skip_alignment = false;
 
 // --------------------------------------------------------------
 
@@ -289,7 +290,7 @@ bool gurobi_opt(
         Array<float>& n_pts
 )
 {
-    double thres_flatteness_mm              = min_thickness / 8.0;
+    double thres_flatteness_mm              = max_thickness / 10.0;
     double max_admissible_non_flatteness_mm = max_thickness / 2.0;
 
     display_conf();
@@ -632,7 +633,10 @@ bool gurobi_opt(
                     all_aligned = false;
                     break; // do not align smaller ones either
                 }
-
+                if (skip_alignment) {
+                  cerr << "==> skipping alignment (as per command line argument)\n";
+                  break;
+                }
                 SLRExpr<double> lavg = 0.0;
                 for (const auto& t : f) {
                     v3u tri   = mesh.surfaceTriangleAt(t);
@@ -646,7 +650,6 @@ bool gurobi_opt(
 
                 // weight
                 obj += 1.0 * (comp_area / tot_flatten_area) * lexpr*lexpr;
-
 
             }
         }
@@ -941,6 +944,7 @@ int main(int argc, char **argv)
     TCLAP::ValueArg<int>        timeArg("c", "compute-time", "max compute time (s) for each iteration, default: 600s", false, 600, "int");
 
     TCLAP::SwitchArg        fabemptyArg("" , "fabempty"    , "fabricable emptyness"                                  , true);
+    TCLAP::SwitchArg        skipAlign  ("" , "skipalign"   , "skip top slice alignment"                              , false);
 
 
     // file and folder
@@ -958,6 +962,7 @@ int main(int argc, char **argv)
 
     cmd.add(thresholdArg);
     cmd.add(fabemptyArg);
+    cmd.add(skipAlign);
 
     // computation
     cmd.add(timeArg);
@@ -980,6 +985,7 @@ int main(int argc, char **argv)
                        ? thresholdArg.getValue()
                        : cos(max_theta * M_PI / 180);
     fabricable_emptiness = fabemptyArg.getValue();
+    skip_alignment = skipAlign.getValue();
 
     if (  timeArg.isSet()) compute_time = (float)timeArg.getValue();
     if (threadArg.isSet())   nb_threads = threadArg.getValue();
